@@ -1,0 +1,56 @@
+* Make codec choices intelligent
+  Currently the choice of codecs you get with each container format is chosen by hand. We should query
+  the GStreamer caps and choose them automatically based on that.
+
+* Not hardcode encoder and muxer plugin names
+  Let GStreamer just provide us any plugin it got available which can encode or mux to wanted format
+  instead of hardcoding plugin names in the code. This is probably also needed to get easy_codec to work.
+
+* Support setting attributes on the encoders
+  This will allow us to choose Dirac Pro as a codec for instance as that is an attribute on the 
+  normal Dirac encoder.
+
+* Enable support for MXF and DNxHD. Once the MXF muxer is in gst-plugins-bad we can enable support for
+  MXF container format and DNxHD video codec.
+
+* ASF support. Summer of code will hopefully provide us with a ASF muxer. This would enable all Windows
+  media formats.
+
+* Add profiles
+  I want to have profiles for things like N810, iPhone, PSP etc. which automatically choose a container
+  format and codecs for you. This would ideally be combined with a videoscaling, which in turn require us
+  to get GStreamer to probe the file upon selection so we can make some decisions on if and how to scale.
+  
+* Enable translations
+  Allow translators to translate the application using po files.
+
+* Add better error handling
+  Make sure the application runs even if directory names etc. are different. Enable reporting when
+  no plugin is found which allows allows muxing or encoding. Verify that Easy Codec install works.
+
+* And status field which lets user know that file is done and where it ended up.
+
+* Get application icon made
+  Find a graphics artist to make nice Tango style icon
+
+* Support remuxing 
+  Allow incoming codecs to be preserved and just remuxed into new file when possible
+
+* Support non-muxed audio codec 
+  Allow the outputting of non-muxed audio codecs. Not sure we really want this as it would add more options
+  to the UI to do something which I doubt a lot of people care to use this application for.
+
+* More advanced features
+  There are many things people might want to do. We want to avoid this application becoming like a lot of
+  other transcoder tools though, which got more buttons and options that you can throw a stick at. 
+  Never expose an option which a 'normal' user is unlikely to understand and want to tweak. 
+  One example of something we *might* want to add is downmixing of audio channels.
+
+* Move more logic out of UI file
+  Currently there is quite a bit of of logic code in the UI class. This should be moved down to the 
+  transcoder file in order to ease the possibility of other user interfaces.
+
+* Windows port
+  Port application to windows and get a py2exe binary going with everything. The video directory stuff is only
+  known current non-portable.
+

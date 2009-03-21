@@ -1,0 +1,47 @@
+Summary:	Transmageddon Video Transcoder
+Name:		@PACKAGE@
+Version:	@VERSION@
+Release:	2
+
+Source:		http://www.linuxrising.org/transmageddon/%{name}-%{version}.tar.gz
+Packager:	uraeus@gnome.org
+License:	LGPL
+Group:		Applications/Multimedia
+URL:		http://www.linuxrising.org/transmageddon
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Requires:	python >= 2.5
+Requires:	gstreamer >= @GST_REQ@
+Requires:	gstreamer-python >= @PYGST_REQ@
+Requires:	pygtk2 >= @PYGTK_REQ@
+Requires:	gnome-python2 >= @PYGNOME_REQ@
+Requires:	gnome-python2-gconf
+
+BuildRequires:	gstreamer-devel >= @GST_REQ@
+BuildRequires:	gstreamer-python >= @PYGST_REQ@
+BuildRequires:	python-devel >= 2.3
+BuildRequires:	pygtk2-devel >= @PYGTK_REQ@
+BuildArch: 	noarch
+
+%description
+Transmageddon Video Transcoding application.
+
+%prep
+%setup -q
+
+%build
+%configure
+
+%makeinstall
+
+%files
+%defattr(-,root,root,-)
+%doc ChangeLog AUTHORS TODO COPYING
+%{_bindir}/transmageddon
+%{_libdir}/transmageddon/*
+%{_datadir}/pixmaps/transmageddon.png
+%{_datadir}/applications/transmageddon.desktop
+
+%changelog
+* Sat Mar 21 2009 Christian Schaller <uraeus@gnome.org>
+- Initial release
