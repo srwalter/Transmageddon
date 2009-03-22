@@ -78,7 +78,7 @@ class TransmageddonUI (gtk.glade.XML):
             CheckDir = os.path.isdir(self.VideoDirectory)
             if CheckDir == (False):
                os.mkdir(self.VideoDirectory)
-               self.FileChooser.set_current_folder(self.VideoDirectory)
+            self.FileChooser.set_current_folder(self.VideoDirectory)
 		
         # Setting AppIcon
             FileExist = os.path.isfile("../../share/pixmaps/transmageddon.png")
