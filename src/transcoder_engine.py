@@ -91,6 +91,7 @@ class Transcoder:
 	text = timeget.strftime("-%H%M%S-%d%m%Y") 
 	self.timestamp = str(text)
 
+	
         self.pipeline = gst.Pipeline("TranscodingPipeline")
 
         self.uridecoder = gst.element_factory_make("uridecodebin", "uridecoder")
@@ -111,7 +112,13 @@ class Transcoder:
 
 	self.containermuxer.link(self.transcodefileoutput)
 	
-	self.pipeline.set_state(gst.STATE_PLAYING)
+	self.Pipeline("playing")    
+
+    def Pipeline (self, state):
+        if state == ("playing"):
+	   self.pipeline.set_state(gst.STATE_PLAYING)
+	elif state == ("null"):
+           self.pipeline.set_state(gst.STATE_NULL)
 
     def OnDynamicPad(self, dbin, sink_pad):
 	# print "OnDynamicPad for Audio and Video Called!"

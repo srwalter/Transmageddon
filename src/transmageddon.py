@@ -5,6 +5,8 @@ import os
 import time
 import transcoder_engine
 import gobject; gobject.threads_init()
+import gettext, locale
+
 
 try:	
  	import pygtk
@@ -24,22 +26,6 @@ try:
 	import gst.interfaces
 except: 
 	pass
-
-class About:
-    def __init__(self):
-	self.gladeFile, "abouttransmageddon.glade"
-        gtk.glade.XML.__init__ (self, self.gladefile)
-        self.aboutBox = self.get_widget('about')
-        self.aboutBox.set_property('Transmageddon')
-        self.aboutBox.set_property('0.5')
-
-        # Hook up individual signals and events.
-        self.aboutBox.connect('response', dialogResponse)
-        self.aboutBox.connect('close', dialogClose)
-        self.aboutBox.connect('delete_event', dialogClose)
-
-    def show(self, *args):
-        self.aboutBox.show()
 
 class TransmageddonUI (gtk.glade.XML):
 	"""This class loads the Glade file of the UI"""
@@ -70,19 +56,31 @@ class TransmageddonUI (gtk.glade.XML):
 		self.wmv2button = self.get_widget("wmv2button")
 		self.TranscodeButton = self.get_widget("TranscodeButton")
 		self.ProgressBar = self.get_widget("ProgressBar")
-		self.TransAbout = gtk.glade.XML (gladefile, "abouttransmageddon.glade")
+		self.cancelbutton = self.get_widget("cancelbutton")
 
 		self.signal_autoconnect(self) # Initialize User Interface
-				
+
+
+# Set the Videos XDG UserDir as the default directory for the filechooser, also make sure directory exists
+		self.VideoDirectory = os.path.expanduser("~")+"/Videos/"
+		CheckDir = os.path.isdir(self.VideoDirectory)
+		if CheckDir == (False):
+	   	   os.mkdir(self.VideoDirectory)
+		self.FileChooser.set_current_folder(self.VideoDirectory)
+		# elif CheckDir == (True): 
+		#   print "Videos directory exist"
+		# print self.VideoDirectory
+
+		
 		# Setting AppIcon
 		main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		main_window.set_icon_from_file("transmageddon.png")
 
-
 		# default all but top box to insensitive by default
 		self.ContainerChoice.set_sensitive(False)
 		self.CodecBox.set_sensitive(False)
-		self.TranscodeButton.set_sensitive(False)		
+		self.TranscodeButton.set_sensitive(False)
+		self.cancelbutton.set_sensitive(False)		
 
 		self.AudioCodec = "vorbis"
 		self.VideoCodec = "theora"
@@ -139,13 +137,21 @@ class TransmageddonUI (gtk.glade.XML):
 	# The Transcodebutton is the one that calls the Transcoder class and thus starts the transcoding
 	def on_TranscodeButton_clicked(self, widget):
 		FileChoice = self.get_widget ("FileChooser").get_uri()
-		print FileChoice
 		FileName = self.get_widget ("FileChooser").get_filename()
-		print FileName
 		ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
-		print ContainerChoice
+		self.FileChooser.set_sensitive(False)
+		self.ContainerChoice.set_sensitive(False)
+		self.CodecBox.set_sensitive(False)
+		self.TranscodeButton.set_sensitive(False)
+		self.cancelbutton.set_sensitive(True)
 		self._transcoder = transcoder_engine.Transcoder(FileChoice, FileName, ContainerChoice, self.AudioCodec, self.VideoCodec)
 		self.BusMessages = self.BusWatcher()
+		
+	def on_cancelbutton_clicked(self, widget):
+		self.FileChooser.set_sensitive(True)
+		self._cancel_encoding = transcoder_engine.Transcoder.Pipeline(self._transcoder,"null")
+		self.ProgressBar.set_fraction(0.0)
+		self.ProgressBar.set_text("Transcoding Progress")
 
 	# define the behaviour of the other buttons
 	def on_FileChooser_file_set(self, widget):
@@ -384,14 +390,18 @@ class TransmageddonUI (gtk.glade.XML):
 
 	def on_wmv2button_pressed(self, widget):
 		self.VideoCodec = "wmv2"
-		print "Radiobutton pressed choosing " + (self.VideoCodec)
-	
+		print "Radiobutton pressed choosing " + (self.VideoCodec) 
+
+	def main(name, version):
+	    gettextName = 'debuggerDemo'
+	    localeDir = '%s/locale' % _currentDir()
+ 	    gettext.bindtextdomain(gettextName, localeDir)
+  	    gettext.textdomain(gettextName)
+  	    gettext.install(gettextName, localeDir, unicode = 1)
+
 	def on_MainWindow_destroy(self, widget):        #Close the program is you click X
-		gtk.main_quit()
-
-	def on_about_activate(self, widget):
-		self.about = Transabout.get_widget("
-
+		gtk.main_quit()          
+	
 if __name__ == "__main__":
 	hwg = TransmageddonUI()
 	gtk.main()
