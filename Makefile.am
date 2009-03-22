@@ -8,6 +8,9 @@ desktop_DATA = transmageddon.desktop
 icondir = $(datadir)/pixmaps
 icon_DATA = transmageddon.png
 
+transmageddondir = $(libdir)/transmageddon
+transmageddon_DATA = transmageddon.png
+
 EXTRA_DIST = \
 	transmageddon.spec \
 	transmageddon.spec.in \

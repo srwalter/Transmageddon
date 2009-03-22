@@ -36,6 +36,7 @@ class TransmageddonUI (gtk.glade.XML):
 	        gtk.glade.XML.__init__ (self, self.gladefile) 
 		
 		##Define functionality of our button and main window
+		self.TopWindow = self.get_widget("TopWindow")
 		self.FileChooser = self.get_widget("FileChooser")
 		self.CodecBox = self.get_widget("CodecBox")
 		self.ContainerChoice = self.get_widget("ContainerChoice")
@@ -73,9 +74,13 @@ class TransmageddonUI (gtk.glade.XML):
 
 		
 		# Setting AppIcon
-		main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-		main_window.set_icon_from_file("transmageddon.png")
-
+		FileExist = os.path.isfile("../../share/pixmaps/transmageddon.png")
+   		if FileExist:		
+		     self.TopWindow.set_icon_from_file("../../share/pixmaps/transmageddon.png")
+                     print "Icon file do exist"
+		else:
+		     self.TopWindow.set_icon_from_file("transmageddon.png")
+				
 		# default all but top box to insensitive by default
 		self.ContainerChoice.set_sensitive(False)
 		self.CodecBox.set_sensitive(False)
