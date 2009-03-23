@@ -20,6 +20,8 @@
   I want to have profiles for things like N810, iPhone, PSP etc. which automatically choose a container
   format and codecs for you. This would ideally be combined with a videoscaling, which in turn require us
   to get GStreamer to probe the file upon selection so we can make some decisions on if and how to scale.
+  Short term I will just add a few 'hardcoded' profiles, but long term I want to look at the banshee stuff
+  and the Gstreamer preset interface to see what we can do.
   
 * Enable translations
   Allow translators to translate the application using po files.

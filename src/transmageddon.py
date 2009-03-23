@@ -69,6 +69,7 @@ class TransmageddonUI (gtk.glade.XML):
             self.TranscodeButton = self.get_widget("TranscodeButton")
             self.ProgressBar = self.get_widget("ProgressBar")
             self.cancelbutton = self.get_widget("cancelbutton")
+            self.StatusBar = self.get_widget("StatusBar")
 
             self.signal_autoconnect(self) # Initialize User Interface
 
@@ -160,10 +161,17 @@ class TransmageddonUI (gtk.glade.XML):
                    StartProgressBar = self.ProgressBarUpdate()
                    print "Got ASYNC_DONE, starting ProgresBar"
                 elif mtype == gst.MESSAGE_EOS:
-                   self.ProgressBar.set_text("Done Transcoding") 
+                   self.ProgressBar.set_text("Done Transcoding")
+                   context_id = self.StatusBar.get_context_id("EOS")
+                   self.StatusBar.push(context_id, ("File saved to " + self.VideoDirectory))
+                   self.FileChooser.set_sensitive(True)
+	           self.ContainerChoice.set_sensitive(True)
+	           self.CodecBox.set_sensitive(True)
+ 	           self.cancelbutton.set_sensitive(False)
                    return False
 	           # print mtype        	
 	        return True
+
 			
 # The Transcodebutton is the one that calls the Transcoder class and thus starts the transcoding
 	def on_TranscodeButton_clicked(self, widget):
@@ -186,6 +194,8 @@ class TransmageddonUI (gtk.glade.XML):
             self._cancel_encoding = transcoder_engine.Transcoder.Pipeline(self._transcoder,"null")
             self.ProgressBar.set_fraction(0.0)
             self.ProgressBar.set_text("Transcoding Progress")
+	    context_id = self.StatusBar.get_context_id("EOS")
+            self.StatusBar.pop(context_id)
 
 # define the behaviour of the other buttons
 	def on_FileChooser_file_set(self, widget):

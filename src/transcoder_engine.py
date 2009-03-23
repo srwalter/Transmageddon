@@ -133,7 +133,7 @@ class Transcoder:
       def OnDynamicPad(self, dbin, sink_pad):
           # print "OnDynamicPad for Audio and Video Called!"
  	  c = sink_pad.get_caps().to_string()
-	  print "we got caps" + c
+	  print "we got caps " + c
 	  if c.startswith("audio/"):
 	     #print "Got an audio cap"
              sink_pad.set_blocking=True
