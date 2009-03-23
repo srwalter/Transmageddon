@@ -72,7 +72,6 @@ class TransmageddonUI (gtk.glade.XML):
 
             self.signal_autoconnect(self) # Initialize User Interface
 
-
 # Set the Videos XDG UserDir as the default directory for the filechooser, also make sure directory exists
             self.VideoDirectory = os.path.expanduser("~")+"/Videos/"
             CheckDir = os.path.isdir(self.VideoDirectory)
@@ -103,6 +102,13 @@ class TransmageddonUI (gtk.glade.XML):
 
             self.p_duration = gst.CLOCK_TIME_NONE
             self.p_time = gst.FORMAT_TIME
+
+# Populate the Container format combobox
+
+            containers = gtk.ListStore(gobject.TYPE_STRING)
+            self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV" ]    
+            for i in self.lst:
+               self.ContainerChoice.append_text(i)
 	
 # Create query on uridecoder to get values to populate progressbar 
 # Notes:
@@ -139,10 +145,12 @@ class TransmageddonUI (gtk.glade.XML):
 # Set up function to start listening on the GStreamer bus
 # We need this so we know when the pipeline has started and when the pipeline has stopped
 # listening for ASYNC_DONE is sorta ok way to listen for when the pipeline is running
+# You need to listen on the GStreamer bus to know when EOS is hit for instance.
 
         def BusWatcher(self):
                 bus = self._transcoder.pipeline.get_bus()
                 bus.add_watch(self.on_message)
+		print bus
 
         def on_message(self, bus, message):
                 mtype = message.type
@@ -172,6 +180,9 @@ class TransmageddonUI (gtk.glade.XML):
 		
 	def on_cancelbutton_clicked(self, widget):
             self.FileChooser.set_sensitive(True)
+	    self.ContainerChoice.set_sensitive(True)
+	    self.CodecBox.set_sensitive(True)
+ 	    self.cancelbutton.set_sensitive(False)
             self._cancel_encoding = transcoder_engine.Transcoder.Pipeline(self._transcoder,"null")
             self.ProgressBar.set_fraction(0.0)
             self.ProgressBar.set_text("Transcoding Progress")
@@ -194,7 +205,6 @@ class TransmageddonUI (gtk.glade.XML):
                self.ac3button.set_sensitive(False)
                self.speexbutton.set_sensitive(True)
                self.celtbutton.set_sensitive(True)
-               self.alacbutton.set_sensitive(False)
                self.theorabutton.set_sensitive(True)
                self.diracbutton.set_sensitive(True)
                self.h264button.set_sensitive(False)
@@ -202,8 +212,6 @@ class TransmageddonUI (gtk.glade.XML):
                self.mpeg4button.set_sensitive(False)
                self.vorbisbutton.set_active(True)
                self.theorabutton.set_active(True)
-               self.wma2button.set_sensitive(False)
-               self.wmv2button.set_sensitive(False)
 	          
             elif ContainerChoice == "Matroska":
                self.vorbisbutton.set_sensitive(True)
@@ -212,15 +220,12 @@ class TransmageddonUI (gtk.glade.XML):
                self.aacbutton.set_sensitive(True)
                self.ac3button.set_sensitive(True)
                self.speexbutton.set_sensitive(True)
-               self.celtbutton.set_sensitive(True)
-               self.alacbutton.set_sensitive(True)
+               self.celtbutton.set_sensitive(False)
                self.theorabutton.set_sensitive(True)
                self.diracbutton.set_sensitive(True)
                self.h264button.set_sensitive(True)
                self.mpeg2button.set_sensitive(True)
-               self.mpeg4button.set_sensitive(True)
-               self.wma2button.set_sensitive(True)
-               self.wmv2button.set_sensitive(True)		
+               self.mpeg4button.set_sensitive(True)		
                self.flacbutton.set_active(True)
                self.AudioCodec = "flac"
                self.diracbutton.set_active(True)
@@ -234,14 +239,11 @@ class TransmageddonUI (gtk.glade.XML):
                self.ac3button.set_sensitive(True)
                self.speexbutton.set_sensitive(False)
                self.celtbutton.set_sensitive(False)
-               self.alacbutton.set_sensitive(False)
                self.theorabutton.set_sensitive(False)
                self.diracbutton.set_sensitive(True)
                self.h264button.set_sensitive(True)
                self.mpeg2button.set_sensitive(True)
                self.mpeg4button.set_sensitive(True)
-               self.wma2button.set_sensitive(True)
-               self.wmv2button.set_sensitive(True)
                self.mp3button.set_active(True)
                self.AudioCodec = "mp3"
                self.h264button.set_active(True)
@@ -255,14 +257,11 @@ class TransmageddonUI (gtk.glade.XML):
                self.ac3button.set_sensitive(True)
                self.speexbutton.set_sensitive(False)
                self.celtbutton.set_sensitive(False)
-               self.alacbutton.set_sensitive(True)
                self.theorabutton.set_sensitive(False)
                self.diracbutton.set_sensitive(True)
                self.h264button.set_sensitive(True)
                self.mpeg2button.set_sensitive(True)
                self.mpeg4button.set_sensitive(True)
-               self.wma2button.set_sensitive(False)
-               self.wmv2button.set_sensitive(False)
                self.aacbutton.set_active(True)
                self.AudioCodec = "aac"
                self.h264button.set_active(True)
@@ -276,14 +275,11 @@ class TransmageddonUI (gtk.glade.XML):
                self.ac3button.set_sensitive(False)
                self.speexbutton.set_sensitive(False)
                self.celtbutton.set_sensitive(False)
-               self.alacbutton.set_sensitive(False)
                self.theorabutton.set_sensitive(False)
                self.diracbutton.set_sensitive(False)
                self.h264button.set_sensitive(True)
                self.mpeg2button.set_sensitive(True)
                self.mpeg4button.set_sensitive(True)
-               self.wma2button.set_sensitive(False)
-               self.wmv2button.set_sensitive(False)
                self.aacbutton.set_active(True)
                self.AudioCodec = "aac"
                self.h264button.set_active(True)
@@ -297,14 +293,11 @@ class TransmageddonUI (gtk.glade.XML):
                self.ac3button.set_sensitive(True)
                self.speexbutton.set_sensitive(False)
                self.celtbutton.set_sensitive(False)
-               self.alacbutton.set_sensitive(False)
                self.theorabutton.set_sensitive(False)
                self.diracbutton.set_sensitive(False)
                self.h264button.set_sensitive(True)
                self.mpeg2button.set_sensitive(True)
                self.mpeg4button.set_sensitive(True)
-               self.wma2button.set_sensitive(False)
-               self.wmv2button.set_sensitive(False)
                self.mp3button.set_active(True)
                self.AudioCodec = "mp3"
                self.mpeg2button.set_active(True)
@@ -318,18 +311,15 @@ class TransmageddonUI (gtk.glade.XML):
                self.ac3button.set_sensitive(True)
                self.speexbutton.set_sensitive(False)
                self.celtbutton.set_sensitive(False)
-               self.alacbutton.set_sensitive(False)
                self.theorabutton.set_sensitive(False)
                self.diracbutton.set_sensitive(True)
                self.h264button.set_sensitive(True)
-               self.mpeg2button.set_sensitive(True)
-               self.mpeg4button.set_sensitive(True)
-               self.wma2button.set_sensitive(False)
-               self.wmv2button.set_sensitive(False)
+               self.mpeg2button.set_sensitive(False)
+               self.mpeg4button.set_sensitive(False)
                self.mp3button.set_active(True)
                self.AudioCodec = "mp3"
                self.mpeg2button.set_active(True)
-               self.VideoCodec = "mp3"
+               self.VideoCodec = "h264"
 		  
             elif ContainerChoice == "FLV":
                self.vorbisbutton.set_sensitive(False)
@@ -339,14 +329,11 @@ class TransmageddonUI (gtk.glade.XML):
                self.ac3button.set_sensitive(False)
                self.speexbutton.set_sensitive(False)
                self.celtbutton.set_sensitive(False)
-               self.alacbutton.set_sensitive(False)
                self.theorabutton.set_sensitive(False)
                self.diracbutton.set_sensitive(False)
                self.h264button.set_sensitive(True)
                self.mpeg2button.set_sensitive(False)
                self.mpeg4button.set_sensitive(False)
-               self.wma2button.set_sensitive(False)
-               self.wmv2button.set_sensitive(False)
                self.mp3button.set_active(True)
                self.AudioCodec = "mp3"
                self.h264button.set_active(True)

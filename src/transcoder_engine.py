@@ -1,5 +1,23 @@
 #!/usr/bin/env python
 
+# Transmageddon
+# Copyright (C) 2009 Christian Schaller <uraeus@gnome.org>
+# 
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License as published by the Free Software Foundation; either
+# version 2 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Library General Public License for more details.
+#
+# You should have received a copy of the GNU Library General Public
+# License along with this library; if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+
 import sys
 import os
 import datetime
@@ -61,9 +79,12 @@ class Transcoder:
 # Choose plugin based on Codec Name
         self.AudioEncoderPlugin = CODECMAP[AudioCodecValue]
         self.VideoEncoderPlugin = CODECMAP[VideoCodecValue]
+	print "Audio encoder plugin is " + self.AudioEncoderPlugin
+	print "Video encoder plugin is " + self.VideoEncoderPlugin
 
 # Choose plugin and file suffix based on Container name
         self.ContainerFormatPlugin = CONTAINERMAP[ContainerChoice]
+	print "Container muxer is " + self.ContainerFormatPlugin
         self.ContainerFormatSuffix = CSUFFIXMAP[ContainerChoice]
 
 # Remove suffix from inbound filename so we can reuse it together with suffix to create outbound filename
@@ -93,7 +114,6 @@ class Transcoder:
 
         self.containermuxer = gst.element_factory_make(self.ContainerFormatPlugin, "containermuxer")
         self.pipeline.add(self.containermuxer)
-        self.containermuxer.sync_state_with_parent()
 
         self.transcodefileoutput = gst.element_factory_make("filesink", "transcodefileoutput")
         self.transcodefileoutput.set_property("location", (self.VideoDirectory+self.FileNameOnly+self.timestamp+self.ContainerFormatSuffix))
@@ -101,21 +121,22 @@ class Transcoder:
         self.transcodefileoutput.sync_state_with_parent()
 
         self.containermuxer.link(self.transcodefileoutput)
-
         self.Pipeline("playing")    
 
       def Pipeline (self, state):
           if state == ("playing"):
+	     self.containermuxer.sync_state_with_parent()
 	     self.pipeline.set_state(gst.STATE_PLAYING)
 	  elif state == ("null"):
              self.pipeline.set_state(gst.STATE_NULL)
 
       def OnDynamicPad(self, dbin, sink_pad):
-# print "OnDynamicPad for Audio and Video Called!"
+          # print "OnDynamicPad for Audio and Video Called!"
  	  c = sink_pad.get_caps().to_string()
+	  print "we got caps" + c
 	  if c.startswith("audio/"):
 	     #print "Got an audio cap"
-
+             sink_pad.set_blocking=True
              self.audioconverter = gst.element_factory_make("audioconvert", "audioconverter")
              self.pipeline.add(self.audioconverter)
              self.audioconverter.sync_state_with_parent()
@@ -134,8 +155,8 @@ class Transcoder:
              self.gstaudioqueue.link(self.containermuxer)
         
 	  elif c.startswith("video/"):
-	  #print "Got an video cap"
-
+	  	# print "Got an video cap" 
+             sink_pad.set_blocking=True
              self.colorspaceconverter = gst.element_factory_make("ffmpegcolorspace", "colorspaceconverter")
              self.pipeline.add(self.colorspaceconverter)
              self.colorspaceconverter.sync_state_with_parent()
@@ -151,6 +172,7 @@ class Transcoder:
              sink_pad.link(self.colorspaceconverter.get_pad("sink"))
              self.colorspaceconverter.link(self.videoencoder)
              self.videoencoder.link(self.gstvideoqueue)
+	     # gst.debug_set_default_threshold(gst.LEVEL_LOG)
              self.gstvideoqueue.link(self.containermuxer)
 
           else:
