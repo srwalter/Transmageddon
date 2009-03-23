@@ -54,3 +54,5 @@
   Port application to windows and get a py2exe binary going with everything. The video directory stuff is only
   known current non-portable.
 
+* Add support for Quickime/MP4/3GPP 
+  Need to block pads for that to work
