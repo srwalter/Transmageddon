@@ -20,7 +20,8 @@ EXTRA_DIST = \
 	AUTHORS \
 	RELEASE \
 	ABOUT-NLS \
-	transmageddon.png
+	transmageddon.png \
+	$(INTLTOOL)
 
 
 DISTCLEANFILES =                \

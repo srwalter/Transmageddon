@@ -51,11 +51,12 @@ dnl check for python
 AS_PATH_PYTHON(2.5)
 
 dnl ALL_LINGUAS="fr"
-# GETTEXT_PACKAGE="transmageddon"
-# AC_SUBST([GETTEXT_PACKAGE])
-# AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], "$GETTEXT_PACKAGE", [Gettext package])
-# AM_GLIB_GNU_GETTEXT
-# IT_PROG_INTLTOOL([0.35.0])
+GETTEXT_PACKAGE="transmageddon"
+AC_SUBST([GETTEXT_PACKAGE])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], "$GETTEXT_PACKAGE", [Gettext package])
+AM_GLIB_GNU_GETTEXT
+IT_PROG_INTLTOOL([0.35.0])
+
 
 CONFIGURED_PYTHONPATH=$PYTHONPATH
 AC_SUBST(CONFIGURED_PYTHONPATH)
@@ -69,6 +70,7 @@ bin/Makefile
 common/Makefile
 common/m4/Makefile
 src/Makefile
+po/Makefile.in
 transmageddon.spec
 transmageddon.desktop
 )
