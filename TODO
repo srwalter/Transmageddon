@@ -1,6 +1,7 @@
 * Make codec choices intelligent
   Currently the choice of codecs you get with each container format is chosen by hand. We should query
-  the GStreamer caps and choose them automatically based on that.
+  the GStreamer caps and choose them automatically based on that. This needs a bit of thinking though,
+  as we also want easy codec install to work.
 
 * Not hardcode encoder and muxer plugin names
   Let GStreamer just provide us any plugin it got available which can encode or mux to wanted format
