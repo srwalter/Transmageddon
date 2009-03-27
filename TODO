@@ -63,3 +63,7 @@
   no proper AMR plugin for GStreamer, the one in 'ugly' is never built as it requires some code 
   which there is a lot of uncertainty about whether can be distributed. Added GSoC proposal for 
   AMR plugins.
+
+* DVD input support
+  Maybe it would be nice to allow DVDs to be the input. Could probably look at Thoggen for how to do that. Not sure we
+  can do it without a lot of extra UI though.
