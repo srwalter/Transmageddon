@@ -9,7 +9,8 @@
 
 * Support setting attributes on the encoders
   This will allow us to choose Dirac Pro as a codec for instance as that is an attribute on the 
-  normal Dirac encoder.
+  normal Dirac encoder. This is also needed for good Apple support as the AAC decoder needs to be
+  set to LC profile instead of Main for iPods etc.
 
 * Enable support for MXF and DNxHD. Once the MXF muxer is in gst-plugins-bad we can enable support for
   MXF container format and DNxHD video codec.
@@ -18,11 +19,12 @@
   media formats.
 
 * Add profiles
-  I want to have profiles for things like N810, iPhone, PSP etc. which automatically choose a container
-  format and codecs for you. This would ideally be combined with a videoscaling, which in turn require us
-  to get GStreamer to probe the file upon selection so we can make some decisions on if and how to scale.
-  Short term I will just add a few 'hardcoded' profiles, but long term I want to look at the banshee stuff
-  and the Gstreamer preset interface to see what we can do.
+  I want to have profiles for things like N810, iPhone, PSP etc. which automatically choose a 
+  container format and codecs for you. This would ideally be combined with a videoscaling, which 
+  in turn require us to get GStreamer to probe the file upon selection so we can make some 
+  decisions on if and how to scale. Short term I will just add a few 'hardcoded' profiles, 
+  but long term I want to look at the banshee stuff and the Gstreamer preset interface to 
+  see what we can do.
   
 * Enable translations
   Allow translators to translate the application using po files.
@@ -40,8 +42,9 @@
   Allow incoming codecs to be preserved and just remuxed into new file when possible
 
 * Support non-muxed audio codec 
-  Allow the outputting of non-muxed audio codecs. Not sure we really want this as it would add more options
-  to the UI to do something which I doubt a lot of people care to use this application for.
+  Allow the outputting of non-muxed audio codecs (mp3 mostly). Not sure we really want this as 
+  it would add more options to the UI to do something which I doubt a lot of people care to use 
+  this application for.
 
 * More advanced features
   There are many things people might want to do. We want to avoid this application becoming like a lot of
@@ -50,11 +53,13 @@
   One example of something we *might* want to add is downmixing of audio channels.
 
 * Move more logic out of UI file
-  Currently there is quite a bit of of logic code in the UI class. This should be moved down to the 
-  transcoder file in order to ease the possibility of other user interfaces.
+  The gstreamer buswatch stuff is moved into the engine, but the query code still requrie a import gst in  the UI.
 
 * Windows port
-  Port application to windows and get a py2exe binary going with everything. The video directory stuff is only
-  known current non-portable.
+  Port application to windows and get a py2exe binary going with everything. The video directory stuff 
+  is only known current non-portable.
 
-* The UI do not offer AMR support atm, which could be useful for 3GPP files. Problem is that there is no proper AMR plugin for GStreamer, the one in 'ugly' is never built as it requires some code which there is a lot of uncertainty about whether can be distributed. Added GSoC proposal for AMR plugins.
+* The UI do not offer AMR support atm, which could be useful for 3GPP files. Problem is that there is 
+  no proper AMR plugin for GStreamer, the one in 'ugly' is never built as it requires some code 
+  which there is a lot of uncertainty about whether can be distributed. Added GSoC proposal for 
+  AMR plugins.
