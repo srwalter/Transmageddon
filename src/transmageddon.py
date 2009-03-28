@@ -25,6 +25,8 @@ import os
 import time
 import transcoder_engine
 import gobject; gobject.threads_init()
+from gst.extend import discoverer
+from urlparse import urlparse
 
 try:	
        import pygtk
@@ -49,6 +51,8 @@ class TransmageddonUI (gtk.glade.XML):
            ##Define functionality of our button and main window
            self.TopWindow = self.get_widget("TopWindow")
            self.FileChooser = self.get_widget("FileChooser")
+           self.videoinformation = self.get_widget("videoinformation")
+           self.audioinformation = self.get_widget("audioinformation")
            self.CodecBox = self.get_widget("CodecBox")
            self.ContainerChoice = self.get_widget("ContainerChoice")
            self.vorbisbutton = self.get_widget("vorbisbutton")
@@ -141,6 +145,42 @@ class TransmageddonUI (gtk.glade.XML):
            gobject.timeout_add(500, self.Increment_Progressbar)
 	   # print "ProgressBar timeout_add startet"
 
+############       
+       def succeed(self, d):
+           if d.is_video:
+               self.videodata = { 'videowidth' : d.videowidth, 'videoheight' : d.videoheight, 
+                                  'videolenght' : d.videolength }
+               self.videoinformation.set_markup("<small>Video height:</small> " + str(self.videodata['videoheight']) +
+                                                "\n<small>Video width:</small> " + str(self.videodata['videowidth']))
+
+               print self.videodata    
+           if d.is_audio:
+               self.audiodata = { 'audiochannels' : d.audiochannels, 'samplerate' : d.audiorate }
+               self.audioinformation.set_markup("<small>Audio channels: </small>" + str(self.audiodata['audiochannels']))
+               print self.audiodata
+
+       def discover(self, path):
+           def discovered(d, is_media):
+               if is_media:
+                   self.succeed(d)
+               else:
+                   fail(path)
+
+           d = discoverer.Discoverer(path)
+           d.connect('discovered', discovered)
+           d.discover()
+ 
+       def usage():
+           print >>sys.stderr, "usage: gst-discover PATH-TO-MEDIA-FILE"
+
+       def mediacheck(self, FileChosen):
+           uri = urlparse (FileChosen)
+           path = uri.path
+           print path
+           return self.discover(path)
+
+#############
+
        # Set up function to start listening on the GStreamer bus
        # We need this so we know when the pipeline has started and when the pipeline has stopped
        # listening for ASYNC_DONE is sorta ok way to listen for when the pipeline is running
@@ -189,6 +229,8 @@ class TransmageddonUI (gtk.glade.XML):
 
        # define the behaviour of the other buttons
        def on_FileChooser_file_set(self, widget):
+           FileName = self.get_widget ("FileChooser").get_filename()
+           codecinfo = self.mediacheck(FileName)
            self.ContainerChoice.set_sensitive(True)
            self.ProgressBar.set_fraction(0.0)
            self.ProgressBar.set_text("Transcoding Progress")
