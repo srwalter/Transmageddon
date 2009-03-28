@@ -145,41 +145,33 @@ class TransmageddonUI (gtk.glade.XML):
            gobject.timeout_add(500, self.Increment_Progressbar)
 	   # print "ProgressBar timeout_add startet"
 
-############       
+       # Use the pygst extension 'discoverer' to get information about the incoming media. Probably need to get codec data in another way.
+       # this code is probably more complex than it needs to be currently       
+       
        def succeed(self, d):
            if d.is_video:
                self.videodata = { 'videowidth' : d.videowidth, 'videoheight' : d.videoheight, 
                                   'videolenght' : d.videolength }
-               self.videoinformation.set_markup("<small>Video height:</small> " + str(self.videodata['videoheight']) +
-                                                "\n<small>Video width:</small> " + str(self.videodata['videowidth']))
-
-               print self.videodata    
+               self.videoinformation.set_markup(''.join(('<small>', 'Video height&#47;width: ', str(self.videodata['videoheight']), 
+                                                "&#47;", str(self.videodata['videowidth']), '</small>')))   
            if d.is_audio:
                self.audiodata = { 'audiochannels' : d.audiochannels, 'samplerate' : d.audiorate }
-               self.audioinformation.set_markup("<small>Audio channels: </small>" + str(self.audiodata['audiochannels']))
-               print self.audiodata
+               self.audioinformation.set_markup(''.join(('<small>', 'Audio channels: ', str(self.audiodata['audiochannels']), '</small>')))
 
        def discover(self, path):
            def discovered(d, is_media):
                if is_media:
                    self.succeed(d)
-               else:
-                   fail(path)
 
            d = discoverer.Discoverer(path)
            d.connect('discovered', discovered)
            d.discover()
- 
-       def usage():
-           print >>sys.stderr, "usage: gst-discover PATH-TO-MEDIA-FILE"
 
        def mediacheck(self, FileChosen):
            uri = urlparse (FileChosen)
            path = uri.path
-           print path
+           # print path
            return self.discover(path)
-
-#############
 
        # Set up function to start listening on the GStreamer bus
        # We need this so we know when the pipeline has started and when the pipeline has stopped
@@ -237,7 +229,9 @@ class TransmageddonUI (gtk.glade.XML):
 
        def ContainerChoice_changed_cb(self, widget):
            self.CodecBox.set_sensitive(True)
-           self.TranscodeButton.set_sensitive(True)		
+           self.TranscodeButton.set_sensitive(True)
+           self.ProgressBar.set_fraction(0.0)
+	   self.ProgressBar.set_text("Transcoding Progress")		
            ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
            if ContainerChoice == "Ogg":
                self.vorbisbutton.set_sensitive(True)
