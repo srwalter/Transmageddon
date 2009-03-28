@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sat Mar 28 15:32:24 2009 -->
+<!--Generated with glade3 3.4.5 on Sat Mar 28 18:03:21 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="TopWindow">
     <property name="visible">True</property>
@@ -187,8 +187,7 @@
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="label" translatable="yes">&lt;small&gt;Video height:&lt;/small&gt;
-&lt;small&gt;Video width:&lt;/small&gt;</property>
+                    <property name="label" translatable="yes">&lt;small&gt;Video height&amp;#47;width:&lt;/small&gt;</property>
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>
