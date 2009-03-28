@@ -67,3 +67,9 @@
 * DVD input support
   Maybe it would be nice to allow DVDs to be the input. Could probably look at Thoggen for how to do that. Not sure we
   can do it without a lot of extra UI though.
+
+* Add an audio denoise filter
+  Audio can be filtered with an audio filter to remove noise.
+
+* Include a download script plug-in section
+  For scripts that can download videos from sites like YouTube.com.
