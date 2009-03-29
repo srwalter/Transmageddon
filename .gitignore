@@ -1,0 +1,17 @@
+autom4te.cache
+autoregen.sh
+bin/transmageddon
+config.log
+config.status
+configure
+*.desktop
+install-sh
+Makefile
+Makefile.in
+Makefile.in.in
+missing
+po/*.gmo
+po/POTFILES
+po/stamp-it
+py-compile
+*.spec
