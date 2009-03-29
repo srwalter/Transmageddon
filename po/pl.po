@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: transmageddon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-29 11:18+0200\n"
-"PO-Revision-Date: 2009-03-29 11:17+0200\n"
+"POT-Creation-Date: 2009-03-29 13:26+0200\n"
+"PO-Revision-Date: 2009-03-29 13:29+0200\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "MIME-Version: 1.0\n"
@@ -134,3 +134,11 @@ msgstr "Zakończono transkodowanie"
 #: ../src/transmageddon.py:192
 msgid "File saved to "
 msgstr "Plik zapisany jako "
+
+#: ../transmageddon.desktop.in.in.h:1
+msgid "Transmageddon Video Transcoder"
+msgstr "Transkoder obrazu wideo Transmageddon"
+
+#: ../transmageddon.desktop.in.in.h:2
+msgid "Video format conversion tool"
+msgstr "Narzędzie do transkodowania obrazu wideo"

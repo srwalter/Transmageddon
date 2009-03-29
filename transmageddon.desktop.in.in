@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Transmageddon Video Transcoder
-Comment=Video format conversion tool
+_Name=Transmageddon Video Transcoder
+_Comment=Video format conversion tool
 Exec=transmageddon
 Terminal=false
 Type=Application

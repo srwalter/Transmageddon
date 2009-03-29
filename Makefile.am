@@ -2,8 +2,11 @@ AUTOMAKE_OPTIONS = dist-bzip2
 
 SUBDIRS	= bin src common
 
+@INTLTOOL_DESKTOP_RULE@
+
 desktopdir = $(datadir)/applications
-desktop_DATA = transmageddon.desktop
+desktop_in_files = transmageddon.desktop.in.in
+desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
 icondir = $(datadir)/pixmaps
 icon_DATA = transmageddon.png
@@ -11,7 +14,7 @@ icon_DATA = transmageddon.png
 transmageddondir = $(libdir)/transmageddon
 transmageddon_DATA = transmageddon.png
 
-EXTRA_DIST = \
+EXTRA_DIST = config.rpath  \
 	transmageddon.spec \
 	transmageddon.spec.in \
 	ChangeLog \
@@ -21,6 +24,7 @@ EXTRA_DIST = \
 	RELEASE \
 	ABOUT-NLS \
 	transmageddon.png \
+	$(desktop_in_files) \
 	$(INTLTOOL)
 
 
@@ -37,7 +41,8 @@ DISTCLEANFILES =                \
 	py-compile		\
 	config.status		\
 	install-sh		\
-	configure
+	configure \
+	$(desktop_DATA)
 
 
 EXTRA_DIST +=                    \
