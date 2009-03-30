@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = dist-bzip2
 
-SUBDIRS	= bin src common
+SUBDIRS	= bin src common po
 
 @INTLTOOL_DESKTOP_RULE@
 

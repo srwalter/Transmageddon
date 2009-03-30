@@ -41,7 +41,10 @@ Transmageddon Video Transcoding application.
 %{_libdir}/transmageddon/*
 %{_datadir}/pixmaps/transmageddon.png
 %{_datadir}/applications/transmageddon.desktop
+%{_datadir}/locale
 
 %changelog
+* Mon Mar 30 2009 Christian Schaller <uraeus@gnome.org>
+- Add i18n
 * Sat Mar 21 2009 Christian Schaller <uraeus@gnome.org>
 - Initial release
