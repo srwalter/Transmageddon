@@ -28,6 +28,9 @@ import gobject; gobject.threads_init()
 from gst.extend import discoverer
 from urlparse import urlparse
 
+from gettext import gettext as _
+import gettext
+
 try:	
        import pygtk
        pygtk.require("2.0")
@@ -44,6 +47,11 @@ class TransmageddonUI (gtk.glade.XML):
        """This class loads the Glade file of the UI"""
 
        def __init__(self):
+           #Set up i18n
+	   for module in gtk.glade, gettext:
+               module.bindtextdomain("transmageddon","../../share/locale")
+               module.textdomain("transmageddon")
+
            #Set the Glade file
            self.gladefile = "transmageddon.glade"  
            gtk.glade.XML.__init__ (self, self.gladefile) 
@@ -103,7 +111,7 @@ class TransmageddonUI (gtk.glade.XML):
            # set default values for various variables
            self.AudioCodec = "vorbis"
            self.VideoCodec = "theora"
-           self.ProgressBar.set_text("Transcoding Progress")
+           self.ProgressBar.set_text(_("Transcoding Progress"))
 
            self.p_duration = gst.CLOCK_TIME_NONE
            self.p_time = gst.FORMAT_TIME
@@ -179,9 +187,9 @@ class TransmageddonUI (gtk.glade.XML):
        # You need to listen on the GStreamer bus to know when EOS is hit for instance.
 
        def _on_eos(self, source):
-           self.ProgressBar.set_text("Done Transcoding")
+           self.ProgressBar.set_text(_("Done Transcoding"))
            context_id = self.StatusBar.get_context_id("EOS")
-           self.StatusBar.push(context_id, ("File saved to " + self.VideoDirectory))
+           self.StatusBar.push(context_id, (_("File saved to ") + self.VideoDirectory))
            self.FileChooser.set_sensitive(True)
 	   self.ContainerChoice.set_sensitive(True)
 	   self.CodecBox.set_sensitive(True)
@@ -205,7 +213,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.TranscodeButton.set_sensitive(False)
            self.cancelbutton.set_sensitive(True)
            self.ProgressBar.set_fraction(0.0)
-	   self.ProgressBar.set_text("Transcoding Progress")
+	   self.ProgressBar.set_text(_("Transcoding Progress"))
            self._start_transcoding()
        
        def on_cancelbutton_clicked(self, widget):
@@ -215,7 +223,7 @@ class TransmageddonUI (gtk.glade.XML):
  	   self.cancelbutton.set_sensitive(False)
            self._cancel_encoding = transcoder_engine.Transcoder.Pipeline(self._transcoder,"null")
            self.ProgressBar.set_fraction(0.0)
-           self.ProgressBar.set_text("Transcoding Progress")
+           self.ProgressBar.set_text(_("Transcoding Progress"))
 	   context_id = self.StatusBar.get_context_id("EOS")
            self.StatusBar.pop(context_id)
 
@@ -225,13 +233,13 @@ class TransmageddonUI (gtk.glade.XML):
            codecinfo = self.mediacheck(FileName)
            self.ContainerChoice.set_sensitive(True)
            self.ProgressBar.set_fraction(0.0)
-           self.ProgressBar.set_text("Transcoding Progress")
+           self.ProgressBar.set_text(_("Transcoding Progress"))
 
        def ContainerChoice_changed_cb(self, widget):
            self.CodecBox.set_sensitive(True)
            self.TranscodeButton.set_sensitive(True)
            self.ProgressBar.set_fraction(0.0)
-	   self.ProgressBar.set_text("Transcoding Progress")		
+	   self.ProgressBar.set_text(_("Transcoding Progress"))		
            ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
            if ContainerChoice == "Ogg":
                self.vorbisbutton.set_sensitive(True)

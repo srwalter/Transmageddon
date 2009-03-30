@@ -26,7 +26,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem11">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-new</property>
+                        <property name="label">gtk-new</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -34,7 +34,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem12">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-open</property>
+                        <property name="label">gtk-open</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -42,7 +42,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem13">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-save</property>
+                        <property name="label">gtk-save</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -50,7 +50,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem14">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-save-as</property>
+                        <property name="label">gtk-save-as</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -63,7 +63,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem15">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-quit</property>
+                        <property name="label">gtk-quit</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -82,7 +82,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem16">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-cut</property>
+                        <property name="label">gtk-cut</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -90,7 +90,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem17">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-copy</property>
+                        <property name="label">gtk-copy</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -98,7 +98,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem18">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-paste</property>
+                        <property name="label">gtk-paste</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -106,7 +106,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem19">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-delete</property>
+                        <property name="label">gtk-delete</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </widget>
@@ -131,7 +131,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="about_dialog">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-about</property>
+                        <property name="label">gtk-about</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="_aboutCb"/>
@@ -851,7 +851,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="label" translatable="yes">gtk-cancel</property>
+                    <property name="label">gtk-cancel</property>
                     <property name="use_stock">True</property>
                     <property name="response_id">0</property>
                     <signal name="clicked" handler="on_cancelbutton_clicked"/>
