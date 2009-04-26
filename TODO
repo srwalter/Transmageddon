@@ -59,3 +59,5 @@
 
 * Include a download script plug-in section
   For scripts that can download videos from sites like YouTube.com.
+
+* Add testing for relevant gstreamer versions to have needed plugins etc.
