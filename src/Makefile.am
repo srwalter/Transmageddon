@@ -5,7 +5,8 @@ transmageddondir = $(libdir)/transmageddon
 transmageddon_PYTHON = \
 	transmageddon.py \
 	transcoder_engine.py \
-	transmageddon.glade
+	transmageddon.glade \
+	codecfinder.py
 
 BUILT_SOURCES=
 
