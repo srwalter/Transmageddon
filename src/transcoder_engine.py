@@ -46,33 +46,19 @@ class Transcoder(gobject.GObject):
        # create a dictionay taking the Codec/Container values and mapping them with plugin names
        # No asfmux atm, hopefully Soc will solve that
 
-       containermap = { 'Ogg' : "application/ogg",'Matroska' : "video/x-matroska", 'MXF' : "application/mxf", 'AVI' : "video/x-msvideo", 
-                        'Quicktime' : "video/quicktime", 'MPEG4' : "application/x-iso-mp4", 'MPEG PS' : "ffmux_mpeg", 
-                        'MPEG TS' : "video/mpegts", 'FLV' : "video/x-flv", '3GPP' : "application/x-3gp" }
-
-       csuffixmap =   { 'Ogg' : ".ogg", 'Matroska' : ".mkv", 'MXF' : ".mxf", 'AVI' : ".avi", 'Quicktime' : ".mov",
-                        'MPEG4' : ".mp4", 'MPEG PS' : ".mpg", 'MPEG TS' : ".ts", 'FLV' : ".flv", '3GPP' : ".3gp" }
-
-       codecmap = {     'vorbis' : "audio/x-vorbis", 'flac' : "audio/x-flac", 'mp3' : "audio/mpeg,mpegversion=1,layer=3", 
-                        'aac' : "audio/mpeg,mpegversion=[4, 2]", 'ac3' : "audio/x-ac3", 'speex' : "audio/x-speex", 
-                        'celt' : "audio/x-celt", 'alac' : "audio/x-alac", 'wma2' : "audio/x-wma,wmaversion=2", 
-                        'theora' : "video/x-theora", 'dirac' : "video/x-dirac", 'h264' : "video/x-h264", 
-                        'mpeg2' : "video/mpeg,mpegversion=2", 'mpeg4' : "ffenc_mpeg4", 'diracpro' : "schroenc", 
-                        'dnxhd' : "video/x-dnxhd", 'wmv2' : "video/x-wmv,wmvversion=2" }
-
        # Choose plugin based on Codec Name
-       audiocaps = codecmap[AUDIOCODECVALUE]
-       videocaps = codecmap[VIDEOCODECVALUE]
+       audiocaps = codecfinder.codecmap[AUDIOCODECVALUE]
+       videocaps = codecfinder.codecmap[VIDEOCODECVALUE]
        self.AudioEncoderPlugin = codecfinder.get_audio_encoder_element(audiocaps)
        self.VideoEncoderPlugin = codecfinder.get_video_encoder_element(videocaps)
        print "Audio encoder plugin is " + self.AudioEncoderPlugin
        print "Video encoder plugin is " + self.VideoEncoderPlugin
 
        # Choose plugin and file suffix based on Container name
-       containercaps = containermap[CONTAINERCHOICE]
+       containercaps = codecfinder.containermap[CONTAINERCHOICE]
        self.ContainerFormatPlugin = codecfinder.get_muxer_element(containercaps)
        print "Container muxer is " + self.ContainerFormatPlugin
-       self.ContainerFormatSuffix = csuffixmap[CONTAINERCHOICE]
+       self.ContainerFormatSuffix = codecfinder.csuffixmap[CONTAINERCHOICE]
 
        # Remove suffix from inbound filename so we can reuse it together with suffix to create outbound filename
        self.FileNameOnly = os.path.splitext(os.path.basename(FILENAME))[0]

@@ -11,6 +11,20 @@ def list_compat(a1, b1):
            return False
    return True
 
+containermap = { 'Ogg' : "application/ogg",'Matroska' : "video/x-matroska", 'MXF' : "application/mxf", 'AVI' : "video/x-msvideo", 
+                        'Quicktime' : "video/quicktime", 'MPEG4' : "application/x-iso-mp4", 'MPEG PS' : "ffmux_mpeg", 
+                        'MPEG TS' : "video/mpegts", 'FLV' : "video/x-flv", '3GPP' : "application/x-3gp" }
+
+csuffixmap =   { 'Ogg' : ".ogg", 'Matroska' : ".mkv", 'MXF' : ".mxf", 'AVI' : ".avi", 'Quicktime' : ".mov",
+                        'MPEG4' : ".mp4", 'MPEG PS' : ".mpg", 'MPEG TS' : ".ts", 'FLV' : ".flv", '3GPP' : ".3gp" }
+
+codecmap = {     'vorbis' : "audio/x-vorbis", 'flac' : "audio/x-flac", 'mp3' : "audio/mpeg,mpegversion=1,layer=3", 
+                        'aac' : "audio/mpeg,mpegversion=[4, 2]", 'ac3' : "audio/x-ac3", 'speex' : "audio/x-speex", 
+                        'celt' : "audio/x-celt", 'alac' : "audio/x-alac", 'wma2' : "audio/x-wma,wmaversion=2", 
+                        'theora' : "video/x-theora", 'dirac' : "video/x-dirac", 'h264' : "video/x-h264", 
+                        'mpeg2' : "video/mpeg,mpegversion=2", 'mpeg4' : "ffenc_mpeg4", 'diracpro' : "schroenc", 
+                        'dnxhd' : "video/x-dnxhd", 'wmv2' : "video/x-wmv,wmvversion=2" }
+
 #####
 #This code checks for available muxers and return a unique caps string
 #for each. It also creates a python dictionary mapping the caps strings 
@@ -40,11 +54,14 @@ def get_muxer_element(containercaps):
            stringcaps.append(caps[0].get_name())
    # print stringcaps   
    muxerchoice = dict(zip(stringcaps, muxers))
-   elementname = muxerchoice[containercaps]    
+   if muxerchoice.has_key(containercaps):
+       elementname = muxerchoice[containercaps]
+   else:
+       elementname = NULL    
    return elementname
 
 ######
-#   This class checks for available audio encoders and return a unique caps string for each. 
+#   This code checks for available audio encoders and return a unique caps string for each. 
 #   It also creates a python dictionary mapping the caps strings to concrete element 
 #   names. 
 ##### 
@@ -85,11 +102,14 @@ def get_audio_encoder_element(audioencodercaps):
            audiocaps.append(result)
    # print audiocaps 
    audioencoderchoice = dict(zip(audiocaps, audioencoders))
-   elementname = audioencoderchoice[audioencodercaps]    
+   if audioencoderchoice.has_key(audioencodercaps):
+       elementname = audioencoderchoice[audioencodercaps]
+   else:
+       elementname = NULL    
    return elementname
 
 #######
-# This class checks for available video encoders and return a unique caps
+# This code checks for available video encoders and return a unique caps
 # string for each. It also creates a python dictionary mapping the caps 
 # strings to concrete element names. 
 #######
@@ -116,7 +136,7 @@ def get_video_encoder_element(videoencodercaps):
    mapping caps to element names. Then return elementname.
    """
    encoders = available_video_encoders()
-   stringcaps = []
+   videocaps = []
    # blacklist all caps information we do not need to create a unique identifier
    blacklist = ['height','width','framerate','systemstream','depth']
    for x in encoders:
@@ -127,8 +147,12 @@ def get_video_encoder_element(videoencodercaps):
            for attr in caps[0].keys():
                if attr not in blacklist:
                    result += ","+attr+"="+str(caps[0][attr])
-           stringcaps.append(result)
+           videocaps.append(result)
    # print stringcaps 
-   videoencoderchoice = dict(zip(stringcaps, encoders))
-   elementname = videoencoderchoice[videoencodercaps]    
+   videoencoderchoice = dict(zip(videocaps, encoders))
+   if videoencoderchoice.has_key(videoencodercaps):
+       elementname = videoencoderchoice[videoencodercaps]
+   else:
+       elementname = NULL    
    return elementname
+
