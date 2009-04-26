@@ -77,7 +77,7 @@ def get_muxer_element(containercaps):
    if muxerchoice.has_key(containercaps):
        elementname = muxerchoice[containercaps]
    else:
-       elementname = ""    
+       elementname = False   
    return elementname
 
 ######
@@ -122,7 +122,7 @@ def get_audio_encoder_element(audioencodercaps):
    if audioencoderchoice.has_key(audioencodercaps):
        elementname = audioencoderchoice[audioencodercaps]
    else:
-       elementname = ""    
+       elementname = False
    return elementname
 
 #######
@@ -170,6 +170,6 @@ def get_video_encoder_element(videoencodercaps):
    if videoencoderchoice.has_key(videoencodercaps):
        elementname = videoencoderchoice[videoencodercaps]
    else:
-       elementname = ""    
+       elementname = False
    return elementname
 

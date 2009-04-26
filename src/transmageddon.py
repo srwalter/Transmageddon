@@ -196,48 +196,73 @@ class TransmageddonUI (gtk.glade.XML):
        self.cancelbutton.set_sensitive(False)
        self.TranscodeButton.set_sensitive(True)
 
-   def donemessage(donemessage, null):
-       if donemessage == gst.pbutils.INSTALL_PLUGINS_SUCCESS:
-           print "success " + str(donemessage)
-           # if gst.update_registry()
-           #    print "Plugin registry updated, trying again"
-           # else
-           #     print "GStreamer registry update failed"
-       elif donemessage == gst.pbutils.INSTALL_PLUGINS_PARTIAL_SUCCESS:
-           print "partial success " + str(donemessage)
-       elif donemessage == gst.pbutils.INSTALL_PLUGINS_NOT_FOUND:
-           print "not found " + str(donemessage)
-       elif donemessage == gst.pbutils.INSTALL_PLUGINS_USER_ABORT:
-           print "aborted " + str(donemessage)
-       else:
-           print "Missing plugin installation failed: " + gst.pbutils.InstallPluginsReturn()
-
    def _start_transcoding(self):
        FileChoice = self.get_widget ("FileChooser").get_uri()
        FileName = self.get_widget ("FileChooser").get_filename()
        ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
+       self._transcoder = transcoder_engine.Transcoder(FileChoice, FileName, ContainerChoice, self.AudioCodec, self.VideoCodec)
+       self._transcoder.connect("ready-for-querying", self.ProgressBarUpdate)
+       self._transcoder.connect("got-eos", self._on_eos)
+       return True
+
+   def donemessage(self, donemessage, null):
+       if donemessage == gst.pbutils.INSTALL_PLUGINS_SUCCESS:
+           # print "success " + str(donemessage)
+           if gst.update_registry():
+               print "Plugin registry updated, trying again"
+           else:
+               print "GStreamer registry update failed"
+           self._start_transcoding()
+       elif donemessage == gst.pbutils.INSTALL_PLUGINS_PARTIAL_SUCCESS:
+           #print "partial success " + str(donemessage)
+           self.check_for_elements()
+       elif donemessage == gst.pbutils.INSTALL_PLUGINS_NOT_FOUND:
+           # print "not found " + str(donemessage)
+           context_id = self.StatusBar.get_context_id("EOS")
+           self.StatusBar.push(context_id, _("Plugins not found, choose different codecs."))
+           self.FileChooser.set_sensitive(True)
+           self.ContainerChoice.set_sensitive(True)
+           self.CodecBox.set_sensitive(True)
+           self.cancelbutton.set_sensitive(False)
+           self.TranscodeButton.set_sensitive(True)
+       elif donemessage == gst.pbutils.INSTALL_PLUGINS_USER_ABORT:
+           context_id = self.StatusBar.get_context_id("EOS")
+           self.StatusBar.push(context_id, _("Codec installation aborted."))
+           self.FileChooser.set_sensitive(True)
+           self.ContainerChoice.set_sensitive(True)
+           self.CodecBox.set_sensitive(True)
+           self.cancelbutton.set_sensitive(False)
+           self.TranscodeButton.set_sensitive(True)
+       else:
+           context_id = self.StatusBar.get_context_id("EOS")
+           self.StatusBar.push(context_id, _("Missing plugin installation failed: ")) + gst.pbutils.InstallPluginsReturn()
+   
+   def check_for_elements(self):
+       ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
        containerstatus = codecfinder.get_muxer_element(codecfinder.containermap[ContainerChoice])
        audiostatus = codecfinder.get_audio_encoder_element(codecfinder.codecmap[self.AudioCodec])
        videostatus = codecfinder.get_video_encoder_element(codecfinder.codecmap[self.VideoCodec])
-       if containerstatus and audiostatus and videostatus != "":  
-           self._transcoder = transcoder_engine.Transcoder(FileChoice, FileName, ContainerChoice, self.AudioCodec, self.VideoCodec)
-           self._transcoder.connect("ready-for-querying", self.ProgressBarUpdate)
-           self._transcoder.connect("got-eos", self._on_eos)
-           return True
-       else:
+       print containerstatus
+       print audiostatus
+       print videostatus
+       if not containerstatus or not videostatus or not audiostatus:
+           print "ended up false"
            fail_info = []  
-           if containerstatus == "": 
+           if containerstatus == False: 
                fail_info.append(gst.caps_from_string(codecfinder.containermap[ContainerChoice]))
-           if audiostatus == "":
+           if audiostatus == False:
                fail_info.append(gst.caps_from_string(codecfinder.codecmap[self.AudioCodec]))
-           if videostatus == "":
+           if videostatus == False:
                fail_info.append(gst.caps_from_string (codecfinder.codecmap[self.VideoCodec]))
            missing = []
            for x in fail_info:
                missing.append(gst.pbutils.missing_encoder_installer_detail_new(x))
            context = gst.pbutils.InstallPluginsContext ()
-           gst.pbutils.install_plugins_async (missing, context, donemessage, "")
-
+           gst.pbutils.install_plugins_async (missing, context, self.donemessage, "")
+       else:
+           print "ended up true"
+           self._start_transcoding()
+   
    # The Transcodebutton is the one that calls the Transcoder class and thus starts the transcoding
    def on_TranscodeButton_clicked(self, widget):
        self.FileChooser.set_sensitive(False)
@@ -247,7 +272,7 @@ class TransmageddonUI (gtk.glade.XML):
        self.cancelbutton.set_sensitive(True)
        self.ProgressBar.set_fraction(0.0)
        self.ProgressBar.set_text(_("Transcoding Progress"))
-       self._start_transcoding()
+       self.check_for_elements()
        
    def on_cancelbutton_clicked(self, widget):
        self.FileChooser.set_sensitive(True)

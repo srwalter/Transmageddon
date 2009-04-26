@@ -51,13 +51,13 @@ class Transcoder(gobject.GObject):
        videocaps = codecfinder.codecmap[VIDEOCODECVALUE]
        self.AudioEncoderPlugin = codecfinder.get_audio_encoder_element(audiocaps)
        self.VideoEncoderPlugin = codecfinder.get_video_encoder_element(videocaps)
-       print "Audio encoder plugin is " + self.AudioEncoderPlugin
-       print "Video encoder plugin is " + self.VideoEncoderPlugin
+       # print "Audio encoder plugin is " + self.AudioEncoderPlugin
+       # print "Video encoder plugin is " + self.VideoEncoderPlugin
 
        # Choose plugin and file suffix based on Container name
        containercaps = codecfinder.containermap[CONTAINERCHOICE]
        self.ContainerFormatPlugin = codecfinder.get_muxer_element(containercaps)
-       print "Container muxer is " + self.ContainerFormatPlugin
+       # print "Container muxer is " + self.ContainerFormatPlugin
        self.ContainerFormatSuffix = codecfinder.csuffixmap[CONTAINERCHOICE]
 
        # Remove suffix from inbound filename so we can reuse it together with suffix to create outbound filename
