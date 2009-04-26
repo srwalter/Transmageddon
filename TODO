@@ -1,12 +1,3 @@
-* Make codec choices intelligent
-  Currently the choice of codecs you get with each container format is chosen by hand. We should query
-  the GStreamer caps and choose them automatically based on that. This needs a bit of thinking though,
-  as we also want easy codec install to work.
-
-* Not hardcode encoder and muxer plugin names
-  Let GStreamer just provide us any plugin it got available which can encode or mux to wanted format
-  instead of hardcoding plugin names in the code. This is probably also needed to get easy_codec to work.
-
 * Support setting attributes on the encoders
   This will allow us to choose Dirac Pro as a codec for instance as that is an attribute on the 
   normal Dirac encoder. This is also needed for good Apple support as the AAC decoder needs to be
@@ -26,14 +17,9 @@
   but long term I want to look at the banshee stuff and the Gstreamer preset interface to 
   see what we can do.
   
-* Enable translations
-  Allow translators to translate the application using po files.
-
 * Add better error handling
   Make sure the application runs even if directory names etc. are different. Enable reporting when
   no plugin is found which allows allows muxing or encoding. Verify that Easy Codec install works.
-
-* And status field which lets user know that file is done and where it ended up.
 
 * Get application icon made
   Find a graphics artist to make nice Tango style icon
