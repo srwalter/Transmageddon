@@ -21,6 +21,7 @@
 import sys
 import os
 import datetime
+import codecfinder
 
 try:	
    import gobject; gobject.threads_init()
@@ -40,37 +41,41 @@ class Transcoder(gobject.GObject):
             'got-eos' : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [])
                     }
 
-   def __init__(self, FileChosen, FileName, ContainerChoice, AudioCodecValue, VideoCodecValue):
+   def __init__(self, FILECHOSEN, FILENAME, CONTAINERCHOICE, AUDIOCODECVALUE, VIDEOCODECVALUE):
        gobject.GObject.__init__(self)
        # create a dictionay taking the Codec/Container values and mapping them with plugin names
        # No asfmux atm, hopefully Soc will solve that
 
-       CONTAINERMAP = { 'Ogg' : "oggmux",'Matroska' : "matroskamux", 'MXF' : "mxfmux", 'AVI' : "avimux", 
-                        'Quicktime' : "qtmux", 'MPEG4' : "mp4mux", 'MPEG PS' : "ffmux_mpeg", 
-                        'MPEG TS' : "mpegtsmux", 'FLV' : "flvmux", '3GPP' : "gppmux" }
+       containermap = { 'Ogg' : "application/ogg",'Matroska' : "video/x-matroska", 'MXF' : "application/mxf", 'AVI' : "video/x-msvideo", 
+                        'Quicktime' : "video/quicktime", 'MPEG4' : "application/x-iso-mp4", 'MPEG PS' : "ffmux_mpeg", 
+                        'MPEG TS' : "video/mpegts", 'FLV' : "video/x-flv", '3GPP' : "application/x-3gp" }
 
-       CSUFFIXMAP =   { 'Ogg' : ".ogg", 'Matroska' : ".mkv", 'MXF' : ".mxf", 'AVI' : ".avi", 'Quicktime' : ".mov",
+       csuffixmap =   { 'Ogg' : ".ogg", 'Matroska' : ".mkv", 'MXF' : ".mxf", 'AVI' : ".avi", 'Quicktime' : ".mov",
                         'MPEG4' : ".mp4", 'MPEG PS' : ".mpg", 'MPEG TS' : ".ts", 'FLV' : ".flv", '3GPP' : ".3gp" }
 
-       CODECMAP = {     'vorbis' : "vorbisenc", 'flac' : "flacenc", 'mp3' : "lame", 'aac' : "faac", 
-                        'ac3' : "ffenc_ac3", 'speex' : "speexenc", 'celt' : "celtenc", 'alac' : "ffenc_alac",
-                        'wma2' : "ffenc_wmav2", 'theora' : "theoraenc", 'dirac' : "schroenc", 'h264' : "x264enc", 
-                        'mpeg2' : "mpeg2enc", 'mpeg4' : "ffenc_mpeg4", 'diracpro' : "schroenc", 'dnxhd' : "ffenc_dnxhd", 
-                        'wmv2' : "ffenc_wmv2" }
+       codecmap = {     'vorbis' : "audio/x-vorbis", 'flac' : "audio/x-flac", 'mp3' : "audio/mpeg,mpegversion=1,layer=3", 
+                        'aac' : "audio/mpeg,mpegversion=[4, 2]", 'ac3' : "audio/x-ac3", 'speex' : "audio/x-speex", 
+                        'celt' : "audio/x-celt", 'alac' : "audio/x-alac", 'wma2' : "audio/x-wma,wmaversion=2", 
+                        'theora' : "video/x-theora", 'dirac' : "video/x-dirac", 'h264' : "video/x-h264", 
+                        'mpeg2' : "video/mpeg,mpegversion=2", 'mpeg4' : "ffenc_mpeg4", 'diracpro' : "schroenc", 
+                        'dnxhd' : "video/x-dnxhd", 'wmv2' : "video/x-wmv,wmvversion=2" }
 
        # Choose plugin based on Codec Name
-       self.AudioEncoderPlugin = CODECMAP[AudioCodecValue]
-       self.VideoEncoderPlugin = CODECMAP[VideoCodecValue]
-       # print "Audio encoder plugin is " + self.AudioEncoderPlugin
-       # print "Video encoder plugin is " + self.VideoEncoderPlugin
+       audiocaps = codecmap[AUDIOCODECVALUE]
+       videocaps = codecmap[VIDEOCODECVALUE]
+       self.AudioEncoderPlugin = codecfinder.get_audio_encoder_element(audiocaps)
+       self.VideoEncoderPlugin = codecfinder.get_video_encoder_element(videocaps)
+       print "Audio encoder plugin is " + self.AudioEncoderPlugin
+       print "Video encoder plugin is " + self.VideoEncoderPlugin
 
        # Choose plugin and file suffix based on Container name
-       self.ContainerFormatPlugin = CONTAINERMAP[ContainerChoice]
-       # print "Container muxer is " + self.ContainerFormatPlugin
-       self.ContainerFormatSuffix = CSUFFIXMAP[ContainerChoice]
+       containercaps = containermap[CONTAINERCHOICE]
+       self.ContainerFormatPlugin = codecfinder.get_muxer_element(containercaps)
+       print "Container muxer is " + self.ContainerFormatPlugin
+       self.ContainerFormatSuffix = csuffixmap[CONTAINERCHOICE]
 
        # Remove suffix from inbound filename so we can reuse it together with suffix to create outbound filename
-       self.FileNameOnly = os.path.splitext(os.path.basename(FileName))[0]
+       self.FileNameOnly = os.path.splitext(os.path.basename(FILENAME))[0]
        self.VideoDirectory = os.path.expanduser("~")+"/Videos/"
        CheckDir = os.path.isdir(self.VideoDirectory)
        if CheckDir == (False):
@@ -88,8 +93,8 @@ class Transcoder(gobject.GObject):
        self.pipeline.set_state(gst.STATE_PAUSED)
         
        self.uridecoder = gst.element_factory_make("uridecodebin", "uridecoder")
-       self.uridecoder.set_property("uri", FileChosen)
-       # print "File loaded " + FileChosen
+       self.uridecoder.set_property("uri", FILECHOSEN)
+       # print "File loaded " + FILECHOSEN
        self.uridecoder.connect("pad-added", self.OnDynamicPad)
        self.pipeline.add(self.uridecoder)
 
@@ -100,8 +105,10 @@ class Transcoder(gobject.GObject):
        self.transcodefileoutput.set_property("location", (self.VideoDirectory+self.FileNameOnly+self.timestamp+self.ContainerFormatSuffix))
        self.pipeline.add(self.transcodefileoutput)
 
-       self.containermuxer.link(self.transcodefileoutput)   
+       self.containermuxer.link(self.transcodefileoutput)  
        
+       
+
        self.uridecoder.set_state(gst.STATE_PAUSED)
 
        self.BusMessages = self.BusWatcher()
