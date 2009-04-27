@@ -31,7 +31,7 @@ import codecfinder
 from gettext import gettext as _
 import gettext
 
-try:	
+try:
        import pygtk
        pygtk.require("2.0")
        import gobject
@@ -54,8 +54,8 @@ class TransmageddonUI (gtk.glade.XML):
            module.textdomain("transmageddon")
 
        #Set the Glade file
-       self.gladefile = "transmageddon.glade"  
-       gtk.glade.XML.__init__ (self, self.gladefile) 
+       self.gladefile = "transmageddon.glade"
+       gtk.glade.XML.__init__ (self, self.gladefile)
 
        #Define functionality of our button and main window
        self.TopWindow = self.get_widget("TopWindow")
@@ -93,22 +93,22 @@ class TransmageddonUI (gtk.glade.XML):
        if CheckDir == (False):
            os.mkdir(self.VideoDirectory)
        self.FileChooser.set_current_folder(self.VideoDirectory)
-		
+
        # Setting AppIcon
        FileExist = os.path.isfile("../../share/pixmaps/transmageddon.png")
-       if FileExist:	
+       if FileExist:
            self.TopWindow.set_icon_from_file("../../share/pixmaps/transmageddon.png")
        else:
            try:
                self.TopWindow.set_icon_from_file("transmageddon.png")
            except:
-	       print "failed to find appicon"
-				
+               print "failed to find appicon"
+
        # default all but top box to insensitive by default
        self.ContainerChoice.set_sensitive(False)
        self.CodecBox.set_sensitive(False)
        self.TranscodeButton.set_sensitive(False)
-       self.cancelbutton.set_sensitive(False)		
+       self.cancelbutton.set_sensitive(False)
 
        # set default values for various variables
        self.AudioCodec = "vorbis"
@@ -120,7 +120,7 @@ class TransmageddonUI (gtk.glade.XML):
 
        # Populate the Container format combobox
        containers = gtk.ListStore(gobject.TYPE_STRING)
-       self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV", "Quicktime", "MPEG4", "3GPP", "MXF" ]    
+       self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV", "Quicktime", "MPEG4", "3GPP", "MXF" ]
        for i in self.lst:
            self.ContainerChoice.append_text(i)
 
@@ -146,7 +146,7 @@ class TransmageddonUI (gtk.glade.XML):
                self.ProgressBar.set_fraction(value)
                return True
            else:
-       	       self.ProgressBar.set_fraction(1.0)	
+               self.ProgressBar.set_fraction(1.0)
                return False
 
    # Call gobject.timeout_add with a value of 500millisecond to regularly poll for position so we can
@@ -237,7 +237,7 @@ class TransmageddonUI (gtk.glade.XML):
        else:
            context_id = self.StatusBar.get_context_id("EOS")
            self.StatusBar.push(context_id, _("Missing plugin installation failed: ")) + gst.pbutils.InstallPluginsReturn()
-   
+
    def check_for_elements(self):
        ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
        containerstatus = codecfinder.get_muxer_element(codecfinder.containermap[ContainerChoice])
@@ -263,7 +263,7 @@ class TransmageddonUI (gtk.glade.XML):
        else:
            print "ended up true"
            self._start_transcoding()
-   
+
    # The Transcodebutton is the one that calls the Transcoder class and thus starts the transcoding
    def on_TranscodeButton_clicked(self, widget):
        self.FileChooser.set_sensitive(False)
@@ -274,7 +274,7 @@ class TransmageddonUI (gtk.glade.XML):
        self.ProgressBar.set_fraction(0.0)
        self.ProgressBar.set_text(_("Transcoding Progress"))
        self.check_for_elements()
-       
+
    def on_cancelbutton_clicked(self, widget):
        self.FileChooser.set_sensitive(True)
        self.ContainerChoice.set_sensitive(True)
@@ -298,7 +298,7 @@ class TransmageddonUI (gtk.glade.XML):
        self.CodecBox.set_sensitive(True)
        self.TranscodeButton.set_sensitive(True)
        self.ProgressBar.set_fraction(0.0)
-       self.ProgressBar.set_text(_("Transcoding Progress"))		
+       self.ProgressBar.set_text(_("Transcoding Progress"))
        ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
        if ContainerChoice == "Ogg":
            self.vorbisbutton.set_sensitive(True)
@@ -479,13 +479,13 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "mp3"
            self.h264button.set_active(True)
            self.VideoCodec = "h264"
-		  
+
    def on_vorbisbutton_pressed(self, widget):
        self.AudioCodec = "vorbis"
-		
+
    def on_flacbutton_pressed(self, widget):
        self.AudioCodec = "flac"
-   	
+
    def on_mp3button_pressed(self, widget):
        self.AudioCodec = "mp3"
        print "setting audio codec to mp3"
@@ -508,22 +508,22 @@ class TransmageddonUI (gtk.glade.XML):
 
    def on_wma2button_pressed(self, widget):
        self.AudioCodec = "wma2"
-		
+
    def on_theorabutton_pressed(self, widget):
        self.VideoCodec = "theora"
- 
+
    def on_diracbutton_pressed(self, widget):
        self.VideoCodec = "dirac"
 
    def on_h264button_pressed(self, widget):
        self.VideoCodec = "h264"
-		
+
    def on_mpeg2button_pressed(self, widget):
        self.VideoCodec = "mpeg2"
-		
+
    def on_mpeg4button_pressed(self, widget):
        self.VideoCodec = "mpeg4"
-		
+
    def on_wmv2button_pressed(self, widget):
        self.VideoCodec = "wmv2"
 
@@ -534,9 +534,9 @@ class TransmageddonUI (gtk.glade.XML):
 
    def on_MainWindow_destroy(self, widget):
        gtk.main_quit()
-	
+
 if __name__ == "__main__":
-	hwg = TransmageddonUI()
-	gtk.main()
+        hwg = TransmageddonUI()
+        gtk.main()
 
 

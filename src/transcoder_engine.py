@@ -23,7 +23,7 @@ import os
 import datetime
 import codecfinder
 
-try:	
+try:
    import gobject; gobject.threads_init()
    import gobject
    import pygst
@@ -66,7 +66,7 @@ class Transcoder(gobject.GObject):
        CheckDir = os.path.isdir(self.VideoDirectory)
        if CheckDir == (False):
            os.mkdir(self.VideoDirectory)
-       # elif CheckDir == (True): 
+       # elif CheckDir == (True):
        #   print "Videos directory exist"
        # print self.VideoDirectory
 
@@ -77,7 +77,7 @@ class Transcoder(gobject.GObject):
 
        self.pipeline = gst.Pipeline("TranscodingPipeline")
        self.pipeline.set_state(gst.STATE_PAUSED)
-        
+
        self.uridecoder = gst.element_factory_make("uridecodebin", "uridecoder")
        self.uridecoder.set_property("uri", FILECHOSEN)
        # print "File loaded " + FILECHOSEN
@@ -91,15 +91,13 @@ class Transcoder(gobject.GObject):
        self.transcodefileoutput.set_property("location", (self.VideoDirectory+self.FileNameOnly+self.timestamp+self.ContainerFormatSuffix))
        self.pipeline.add(self.transcodefileoutput)
 
-       self.containermuxer.link(self.transcodefileoutput)  
-       
-       
+       self.containermuxer.link(self.transcodefileoutput)
 
        self.uridecoder.set_state(gst.STATE_PAUSED)
 
        self.BusMessages = self.BusWatcher()
 
-       self.uridecoder.connect("no-more-pads", self.noMorePads) # we need to wait on this one before going further 
+       self.uridecoder.connect("no-more-pads", self.noMorePads) # we need to wait on this one before going further
 
    def noMorePads(self, dbin):
        self.transcodefileoutput.set_state(gst.STATE_PAUSED)
@@ -109,7 +107,7 @@ class Transcoder(gobject.GObject):
 
    def idlePlay(self):
         self.Pipeline("playing")
-        # print "gone to playing" 
+        # print "gone to playing"
         return False
 
    def BusWatcher(self):
@@ -130,15 +128,15 @@ class Transcoder(gobject.GObject):
            # print "emiting 'ready' signal"
        elif mtype == gst.MESSAGE_EOS:
            self.emit('got-eos')
-           # print "Emiting 'got-eos' signal"  	
+           # print "Emiting 'got-eos' signal"
        return True
-   
+
    def OnDynamicPad(self, dbin, sink_pad):
        # print "OnDynamicPad for Audio and Video Called!"
        c = sink_pad.get_caps().to_string()
        # print "we got caps " + c
        if c.startswith("audio/"):
-	   #print "Got an audio cap"
+           #print "Got an audio cap"
            self.audioconverter = gst.element_factory_make("audioconvert")
            self.pipeline.add(self.audioconverter)
 
@@ -155,9 +153,9 @@ class Transcoder(gobject.GObject):
            self.audioencoder.set_state(gst.STATE_PAUSED)
            self.gstaudioqueue.set_state(gst.STATE_PAUSED)
            self.gstaudioqueue.link(self.containermuxer)
-        
+
        elif c.startswith("video/"):
-           # print "Got an video cap" 
+           # print "Got an video cap"
            self.colorspaceconverter = gst.element_factory_make("ffmpegcolorspace")
            self.pipeline.add(self.colorspaceconverter)
 
@@ -176,11 +174,11 @@ class Transcoder(gobject.GObject):
 
            self.gstvideoqueue.link(self.containermuxer)
        else:
-	   raise Exception("Got a non-A/V pad!")
-	   # print "Got a non-A/V pad!"
-      
+           raise Exception("Got a non-A/V pad!")
+           # print "Got a non-A/V pad!"
+
    def Pipeline (self, state):
        if state == ("playing"):
-	   self.pipeline.set_state(gst.STATE_PLAYING)
+           self.pipeline.set_state(gst.STATE_PLAYING)
        elif state == ("null"):
            self.pipeline.set_state(gst.STATE_NULL)
