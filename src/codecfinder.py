@@ -42,7 +42,7 @@ codecmap = {     'vorbis' : "audio/x-vorbis", 'flac' : "audio/x-flac", 'mp3' : "
                         'aac' : "audio/mpeg,mpegversion=[4, 2]", 'ac3' : "audio/x-ac3", 'speex' : "audio/x-speex", 
                         'celt' : "audio/x-celt", 'alac' : "audio/x-alac", 'wma2' : "audio/x-wma,wmaversion=2", 
                         'theora' : "video/x-theora", 'dirac' : "video/x-dirac", 'h264' : "video/x-h264", 
-                        'mpeg2' : "video/mpeg,mpegversion=2", 'mpeg4' : "ffenc_mpeg4", 'diracpro' : "schroenc", 
+                        'mpeg2' : "video/mpeg,mpegversion=2", 'mpeg4' : "video/mpeg,mpegversion=4", 'diracpro' : "schroenc", 
                         'dnxhd' : "video/x-dnxhd", 'wmv2' : "video/x-wmv,wmvversion=2" }
 
 #####
