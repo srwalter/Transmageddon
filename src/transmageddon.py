@@ -79,6 +79,7 @@ class TransmageddonUI (gtk.glade.XML):
        self.mpeg4button = self.get_widget("mpeg4button")
        self.wma2button = self.get_widget("wma2button")
        self.wmv2button = self.get_widget("wmv2button")
+       self.xvidbutton = self.get_widget("xvidbutton")
        self.TranscodeButton = self.get_widget("TranscodeButton")
        self.ProgressBar = self.get_widget("ProgressBar")
        self.cancelbutton = self.get_widget("cancelbutton")
@@ -119,7 +120,7 @@ class TransmageddonUI (gtk.glade.XML):
 
        # Populate the Container format combobox
        containers = gtk.ListStore(gobject.TYPE_STRING)
-       self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV", "Quicktime", "MPEG4", "3GPP" ]    
+       self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV", "Quicktime", "MPEG4", "3GPP", "MXF" ]    
        for i in self.lst:
            self.ContainerChoice.append_text(i)
 
@@ -161,7 +162,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.videodata = { 'videowidth' : d.videowidth, 'videoheight' : d.videoheight, 
                               'videolenght' : d.videolength }
            self.videoinformation.set_markup(''.join(('<small>', 'Video height&#47;width: ', str(self.videodata['videoheight']), 
-                                            "&#47;", str(self.videodata['videowidth']), '</small>')))   
+                                            "x", str(self.videodata['videowidth']), '</small>')))   
        if d.is_audio:
            self.audiodata = { 'audiochannels' : d.audiochannels, 'samplerate' : d.audiorate }
            self.audioinformation.set_markup(''.join(('<small>', 'Audio channels: ', str(self.audiodata['audiochannels']), '</small>')))
@@ -312,8 +313,27 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_sensitive(False)
            self.mpeg2button.set_sensitive(False)
            self.mpeg4button.set_sensitive(False)
+           self.xvidbutton.set_sensitive(False)
            self.vorbisbutton.set_active(True)
            self.theorabutton.set_active(True)
+       if ContainerChoice == "MXF":
+           self.vorbisbutton.set_sensitive(False)
+           self.flacbutton.set_sensitive(False)
+           self.mp3button.set_sensitive(True)
+           self.aacbutton.set_sensitive(True)
+           self.ac3button.set_sensitive(True)
+           self.speexbutton.set_sensitive(False)
+           self.celtbutton.set_sensitive(False)
+           self.theorabutton.set_sensitive(False)
+           self.diracbutton.set_sensitive(True)
+           self.h264button.set_sensitive(True)
+           self.mpeg2button.set_sensitive(True)
+           self.mpeg4button.set_sensitive(True)
+           self.xvidbutton.set_sensitive(False)
+           self.mp3button.set_active(True)
+           self.diracbutton.set_active(True)
+           self.AudioCodec = "mp3"
+           self.VideoCodec = "dirac"
        elif ContainerChoice == "Matroska":
            self.vorbisbutton.set_sensitive(True)
            self.flacbutton.set_sensitive(True)
@@ -326,7 +346,8 @@ class TransmageddonUI (gtk.glade.XML):
            self.diracbutton.set_sensitive(True)
            self.h264button.set_sensitive(True)
            self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)		
+           self.mpeg4button.set_sensitive(True)	
+           self.xvidbutton.set_sensitive(True)	
            self.flacbutton.set_active(True)
            self.AudioCodec = "flac"
            self.diracbutton.set_active(True)
@@ -344,6 +365,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_sensitive(True)
            self.mpeg2button.set_sensitive(True)
            self.mpeg4button.set_sensitive(True)
+           self.xvidbutton.set_sensitive(True)
            self.mp3button.set_active(True)
            self.AudioCodec = "mp3"
            self.h264button.set_active(True)
@@ -361,6 +383,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_sensitive(True)
            self.mpeg2button.set_sensitive(True)
            self.mpeg4button.set_sensitive(True)
+           self.xvidbutton.set_sensitive(False)
            self.aacbutton.set_active(True)
            self.AudioCodec = "aac"
            self.h264button.set_active(True)
@@ -379,6 +402,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_sensitive(True)
            self.mpeg2button.set_sensitive(True)
            self.mpeg4button.set_sensitive(True)
+           self.xvidbutton.set_sensitive(False)
            self.aacbutton.set_active(True)
            self.AudioCodec = "aac"
            self.h264button.set_active(True)
@@ -396,6 +420,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_sensitive(True)
            self.mpeg2button.set_sensitive(True)
            self.mpeg4button.set_sensitive(True)
+           self.xvidbutton.set_sensitive(False)
            self.aacbutton.set_active(True)
            self.AudioCodec = "mp3"
            self.h264button.set_active(True)
@@ -413,6 +438,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_sensitive(True)
            self.mpeg2button.set_sensitive(True)
            self.mpeg4button.set_sensitive(True)
+           self.xvidbutton.set_sensitive(False)
            self.mp3button.set_active(True)
            self.AudioCodec = "mp3"
            self.mpeg2button.set_active(True)
@@ -430,27 +456,29 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_sensitive(True)
            self.mpeg2button.set_sensitive(False)
            self.mpeg4button.set_sensitive(False)
+           self.xvidbutton.set_sensitive(False)
            self.mp3button.set_active(True)
            self.AudioCodec = "mp3"
            self.mpeg2button.set_active(True)
            self.VideoCodec = "h264"	  
        elif ContainerChoice == "FLV":
-            self.vorbisbutton.set_sensitive(False)
-            self.flacbutton.set_sensitive(False)
-            self.mp3button.set_sensitive(True)
-            self.aacbutton.set_sensitive(False)
-            self.ac3button.set_sensitive(False)
-            self.speexbutton.set_sensitive(False)
-            self.celtbutton.set_sensitive(False)
-            self.theorabutton.set_sensitive(False)
-            self.diracbutton.set_sensitive(False)
-            self.h264button.set_sensitive(True)
-            self.mpeg2button.set_sensitive(False)
-            self.mpeg4button.set_sensitive(False)
-            self.mp3button.set_active(True)
-            self.AudioCodec = "mp3"
-            self.h264button.set_active(True)
-            self.VideoCodec = "h264"
+           self.vorbisbutton.set_sensitive(False)
+           self.flacbutton.set_sensitive(False)
+           self.mp3button.set_sensitive(True)
+           self.aacbutton.set_sensitive(False)
+           self.ac3button.set_sensitive(False)
+           self.speexbutton.set_sensitive(False)
+           self.celtbutton.set_sensitive(False)
+           self.theorabutton.set_sensitive(False)
+           self.diracbutton.set_sensitive(False)
+           self.h264button.set_sensitive(True)
+           self.mpeg2button.set_sensitive(False)
+           self.mpeg4button.set_sensitive(False)
+           self.xvidbutton.set_sensitive(False)
+           self.mp3button.set_active(True)
+           self.AudioCodec = "mp3"
+           self.h264button.set_active(True)
+           self.VideoCodec = "h264"
 		  
    def on_vorbisbutton_pressed(self, widget):
        self.AudioCodec = "vorbis"
@@ -460,6 +488,8 @@ class TransmageddonUI (gtk.glade.XML):
    	
    def on_mp3button_pressed(self, widget):
        self.AudioCodec = "mp3"
+       print "setting audio codec to mp3"
+       print self.AudioCodec
 
    def on_aacbutton_pressed(self, widget):
        self.AudioCodec = "aac"
@@ -496,6 +526,11 @@ class TransmageddonUI (gtk.glade.XML):
 		
    def on_wmv2button_pressed(self, widget):
        self.VideoCodec = "wmv2"
+
+   def on_xvidbutton_pressed(self, widget):
+       self.VideoCodec = "xvid"
+       print "setting videocodec to xvid"
+       print self.VideoCodec
 
    def on_MainWindow_destroy(self, widget):
        gtk.main_quit()

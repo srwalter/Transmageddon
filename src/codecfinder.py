@@ -42,8 +42,8 @@ codecmap = {     'vorbis' : "audio/x-vorbis", 'flac' : "audio/x-flac", 'mp3' : "
                         'aac' : "audio/mpeg,mpegversion=[4, 2]", 'ac3' : "audio/x-ac3", 'speex' : "audio/x-speex", 
                         'celt' : "audio/x-celt", 'alac' : "audio/x-alac", 'wma2' : "audio/x-wma,wmaversion=2", 
                         'theora' : "video/x-theora", 'dirac' : "video/x-dirac", 'h264' : "video/x-h264", 
-                        'mpeg2' : "video/mpeg,mpegversion=2", 'mpeg4' : "video/mpeg,mpegversion=4", 'diracpro' : "schroenc", 
-                        'dnxhd' : "video/x-dnxhd", 'wmv2' : "video/x-wmv,wmvversion=2" }
+                        'mpeg2' : "video/mpeg,mpegversion=2", 'mpeg4' : "video/mpeg,mpegversion=4",
+                        'xvid' : "video/x-xvid", 'dnxhd' : "video/x-dnxhd", 'wmv2' : "video/x-wmv,wmvversion=2" }
 
 #####
 #This code checks for available muxers and return a unique caps string
@@ -72,7 +72,7 @@ def get_muxer_element(containercaps):
        sinkcaps = [x.get_caps() for x in factory.get_static_pad_templates() if x.direction == gst.PAD_SRC]
        for caps in sinkcaps:
            stringcaps.append(caps[0].get_name())
-   # print stringcaps   
+   print stringcaps   
    muxerchoice = dict(zip(stringcaps, muxers))
    if muxerchoice.has_key(containercaps):
        elementname = muxerchoice[containercaps]
@@ -117,7 +117,7 @@ def get_audio_encoder_element(audioencodercaps):
                if attr not in blacklist:
                    result += ","+attr+"="+str(caps[0][attr])
            audiocaps.append(result)
-   # print audiocaps 
+   print audiocaps 
    audioencoderchoice = dict(zip(audiocaps, audioencoders))
    if audioencoderchoice.has_key(audioencodercaps):
        elementname = audioencoderchoice[audioencodercaps]
@@ -165,8 +165,9 @@ def get_video_encoder_element(videoencodercaps):
                if attr not in blacklist:
                    result += ","+attr+"="+str(caps[0][attr])
            videocaps.append(result)
-   # print stringcaps 
+   # print videocaps 
    videoencoderchoice = dict(zip(videocaps, encoders))
+   print videoencoderchoice
    if videoencoderchoice.has_key(videoencodercaps):
        elementname = videoencoderchoice[videoencodercaps]
    else:
