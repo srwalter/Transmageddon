@@ -1,0 +1,7 @@
+0.8: Minor fixes: 
+   correct MPEG4/Div5 so it actually works
+   add MXF support
+   add DNxHD
+   update Polish translation
+   misc whitespace fixes
+   minor UI polish
