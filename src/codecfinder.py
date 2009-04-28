@@ -51,16 +51,16 @@ codecmap = {     'vorbis' : "audio/x-vorbis", 'flac' : "audio/x-flac", 'mp3' : "
 #for each. It also creates a python dictionary mapping the caps strings 
 #to concrete element names. 
 #####
-   
+
 def available_muxers():
    """ return all available muxers except the broken ffmpeg ones """
    flist = gst.registry_get_default().get_feature_list(gst.ElementFactory)
    res = []
    for fact in flist:
-       if list_compat(["Codec", "Muxer"], fact.get_klass().split('/')) and not fact.get_name().startswith('ffmux'): 
+       if list_compat(["Codec", "Muxer"], fact.get_klass().split('/')) and not fact.get_name().startswith('ffmux'):
            res.append(fact.get_name())
    return res
-   
+
 def get_muxer_element(containercaps): 
    """
    Check all muxers for their caps and create a dictionary mapping caps 
@@ -73,19 +73,20 @@ def get_muxer_element(containercaps):
        sinkcaps = [x.get_caps() for x in factory.get_static_pad_templates() if x.direction == gst.PAD_SRC]
        for caps in sinkcaps:
            stringcaps.append(caps[0].get_name())
-   # print stringcaps   
+
+   # print stringcaps
    muxerchoice = dict(zip(stringcaps, muxers))
    if muxerchoice.has_key(containercaps):
        elementname = muxerchoice[containercaps]
    else:
-       elementname = False   
+       elementname = False
    return elementname
 
 ######
-#   This code checks for available audio encoders and return a unique caps string for each. 
-#   It also creates a python dictionary mapping the caps strings to concrete element 
-#   names. 
-##### 
+#   This code checks for available audio encoders and return a unique caps string for each.
+#   It also creates a python dictionary mapping the caps strings to concrete element
+#   names.
+#####
 def available_audio_encoders():
    """ returns all available audio encoders """
    flist = gst.registry_get_default().get_feature_list(gst.ElementFactory)
@@ -129,9 +130,9 @@ def get_audio_encoder_element(audioencodercaps):
 #######
 # This code checks for available video encoders and return a unique caps
 # string for each. It also creates a python dictionary mapping the caps 
-# strings to concrete element names. 
+# strings to concrete element names.
 #######
-   
+
 def available_video_encoders():
    """ returns all available video encoders """
    flist = gst.registry_get_default().get_feature_list(gst.ElementFactory)
@@ -166,7 +167,7 @@ def get_video_encoder_element(videoencodercaps):
                if attr not in blacklist:
                    result += ","+attr+"="+str(caps[0][attr])
            videocaps.append(result)
-   # print videocaps 
+   # print videocaps
    videoencoderchoice = dict(zip(videocaps, encoders))
    # print videoencoderchoice
    if videoencoderchoice.has_key(videoencodercaps):
