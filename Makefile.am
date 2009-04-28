@@ -14,7 +14,7 @@ icon_DATA = transmageddon.png
 transmageddondir = $(libdir)/transmageddon
 transmageddon_DATA = transmageddon.png
 
-EXTRA_DIST = config.rpath  \
+EXTRA_DIST = \
 	transmageddon.spec \
 	transmageddon.spec.in \
 	ChangeLog \
