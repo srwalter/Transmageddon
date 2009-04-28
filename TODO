@@ -61,3 +61,11 @@
   For scripts that can download videos from sites like YouTube.com.
 
 * Add testing for relevant gstreamer versions to have needed plugins etc.
+
+* Add some checking on input, making sure its valid and a audio+video file
+
+* remove status message when people choose new codec combo if codec download fails
+
+* give timeestimate for conversion process
+
+* Add xvid support
