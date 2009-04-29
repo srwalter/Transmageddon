@@ -45,6 +45,42 @@ try:
 except:
        sys.exit(1)
 
+       
+supported_containers = [
+        "Ogg",
+        "Matroska",
+        "AVI",
+        "MPEG TS",
+        "FLV",
+        "Quicktime",
+        "MPEG4",
+        "3GPP",
+        "MXF"
+]
+
+supported_audio_codecs = [
+       "vorbis",
+       "flac",
+       "mp3",
+       "aac",
+       "ac3",
+       "speex",
+       "celt",
+#       "alac",
+#       "wma2",
+]
+
+supported_video_codecs = [
+       "theora",
+       "dirac",
+       "h264",
+       "mpeg2",
+       "mpeg4",
+#       "wmv2",
+       "xvid",
+       "dnxhd",
+]
+
 class TransmageddonUI (gtk.glade.XML):
    """This class loads the Glade file of the UI"""
    def __init__(self):
@@ -64,23 +100,17 @@ class TransmageddonUI (gtk.glade.XML):
        self.audioinformation = self.get_widget("audioinformation")
        self.CodecBox = self.get_widget("CodecBox")
        self.ContainerChoice = self.get_widget("ContainerChoice")
-       self.vorbisbutton = self.get_widget("vorbisbutton")
-       self.flacbutton = self.get_widget("flacbutton")
-       self.mp3button = self.get_widget("mp3button")
-       self.aacbutton = self.get_widget("aacbutton")
-       self.ac3button = self.get_widget("ac3button")
-       self.speexbutton = self.get_widget("speexbutton")
-       self.celtbutton = self.get_widget("celtbutton")
-       self.alacbutton = self.get_widget("alacbutton")
-       self.theorabutton = self.get_widget("theorabutton")
-       self.diracbutton = self.get_widget("diracbutton")
-       self.h264button = self.get_widget("h264button")
-       self.mpeg2button = self.get_widget("mpeg2button")
-       self.mpeg4button = self.get_widget("mpeg4button")
-       self.wma2button = self.get_widget("wma2button")
-       self.wmv2button = self.get_widget("wmv2button")
-       self.xvidbutton = self.get_widget("xvidbutton")
-       self.dnxhdbutton = self.get_widget("dnxhdbutton")
+
+       self.codec_buttons = dict()
+       for c in supported_audio_codecs:
+           self.codec_buttons[c] = self.get_widget(c+"button")
+           self.codec_buttons[c].connect("clicked",
+                                         self.on_audiobutton_pressed, c)
+       for c in supported_video_codecs:
+           self.codec_buttons[c] = self.get_widget(c+"button")
+           self.codec_buttons[c].connect("clicked",
+                                         self.on_videobutton_pressed, c)
+
        self.TranscodeButton = self.get_widget("TranscodeButton")
        self.ProgressBar = self.get_widget("ProgressBar")
        self.cancelbutton = self.get_widget("cancelbutton")
@@ -121,7 +151,7 @@ class TransmageddonUI (gtk.glade.XML):
 
        # Populate the Container format combobox
        containers = gtk.ListStore(gobject.TYPE_STRING)
-       self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV", "Quicktime", "MPEG4", "3GPP", "MXF" ]
+       self.lst = supported_containers
        for i in self.lst:
            self.ContainerChoice.append_text(i)
 
@@ -298,246 +328,200 @@ class TransmageddonUI (gtk.glade.XML):
        self.ProgressBar.set_text(_("Transcoding Progress"))
        ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
        if ContainerChoice == "Ogg":
-           self.vorbisbutton.set_sensitive(True)
-           self.flacbutton.set_sensitive(True)
-           self.mp3button.set_sensitive(False)
-           self.aacbutton.set_sensitive(False)
-           self.ac3button.set_sensitive(False)
-           self.speexbutton.set_sensitive(True)
-           self.celtbutton.set_sensitive(True)
-           self.theorabutton.set_sensitive(True)
-           self.diracbutton.set_sensitive(True)
-           self.h264button.set_sensitive(False)
-           self.mpeg2button.set_sensitive(False)
-           self.mpeg4button.set_sensitive(False)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(False)
-           self.vorbisbutton.set_active(True)
-           self.theorabutton.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(True)
+           self.codec_buttons['flac'].set_sensitive(True)
+           self.codec_buttons['mp3'].set_sensitive(False)
+           self.codec_buttons['aac'].set_sensitive(False)
+           self.codec_buttons['ac3'].set_sensitive(False)
+           self.codec_buttons['speex'].set_sensitive(True)
+           self.codec_buttons['celt'].set_sensitive(True)
+           self.codec_buttons['theora'].set_sensitive(True)
+           self.codec_buttons['dirac'].set_sensitive(True)
+           self.codec_buttons['h264'].set_sensitive(False)
+           self.codec_buttons['mpeg2'].set_sensitive(False)
+           self.codec_buttons['mpeg4'].set_sensitive(False)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['vorbis'].set_active(True)
+           self.codec_buttons['theora'].set_active(True)
        if ContainerChoice == "MXF":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(True)
-           self.ac3button.set_sensitive(True)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(False)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(True)
-           self.mp3button.set_active(True)
-           self.diracbutton.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(True)
+           self.codec_buttons['ac3'].set_sensitive(True)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(False)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(True)
+           self.codec_buttons['mpeg4'].set_sensitive(True)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(True)
+           self.codec_buttons['mp3'].set_active(True)
+           self.codec_buttons['dirac'].set_active(True)
            self.AudioCodec = "mp3"
            self.VideoCodec = "dirac"
        elif ContainerChoice == "Matroska":
-           self.vorbisbutton.set_sensitive(True)
-           self.flacbutton.set_sensitive(True)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(True)
-           self.ac3button.set_sensitive(True)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(True)
-           self.diracbutton.set_sensitive(True)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)	
-           self.xvidbutton.set_sensitive(True)	
-           self.dnxhdbutton.set_sensitive(False)
-           self.flacbutton.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(True)
+           self.codec_buttons['flac'].set_sensitive(True)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(True)
+           self.codec_buttons['ac3'].set_sensitive(True)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(True)
+           self.codec_buttons['dirac'].set_sensitive(True)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(True)
+           self.codec_buttons['mpeg4'].set_sensitive(True)	
+           self.codec_buttons['xvid'].set_sensitive(True)	
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['flac'].set_active(True)
            self.AudioCodec = "flac"
-           self.diracbutton.set_active(True)
+           self.codec_buttons['dirac'].set_active(True)
            self.VideoCodec = "dirac"
        elif ContainerChoice == "AVI":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(False)
-           self.ac3button.set_sensitive(True)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(True)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)
-           self.xvidbutton.set_sensitive(True)
-           self.dnxhdbutton.set_sensitive(False)
-           self.mp3button.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(False)
+           self.codec_buttons['ac3'].set_sensitive(True)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(True)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(True)
+           self.codec_buttons['mpeg4'].set_sensitive(True)
+           self.codec_buttons['xvid'].set_sensitive(True)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_active(True)
            self.AudioCodec = "mp3"
-           self.h264button.set_active(True)
+           self.codec_buttons['h264'].set_active(True)
            self.VideoCodec = "h264"
        elif ContainerChoice == "Quicktime":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(True)
-           self.ac3button.set_sensitive(True)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(True)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(False)
-           self.aacbutton.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(True)
+           self.codec_buttons['ac3'].set_sensitive(True)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(True)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(True)
+           self.codec_buttons['mpeg4'].set_sensitive(True)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['aac'].set_active(True)
            self.AudioCodec = "aac"
-           self.h264button.set_active(True)
+           self.codec_buttons['h264'].set_active(True)
            self.VideoCodec = "h264"
 
        elif ContainerChoice == "MPEG4":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(True)
-           self.ac3button.set_sensitive(False)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(False)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(False)
-           self.aacbutton.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(True)
+           self.codec_buttons['ac3'].set_sensitive(False)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(False)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(True)
+           self.codec_buttons['mpeg4'].set_sensitive(True)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['aac'].set_active(True)
            self.AudioCodec = "aac"
-           self.h264button.set_active(True)
+           self.codec_buttons['h264'].set_active(True)
            self.VideoCodec = "h264"
        elif ContainerChoice == "3GPP":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(True)
-           self.ac3button.set_sensitive(False)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(False)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(False)
-           self.aacbutton.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(True)
+           self.codec_buttons['ac3'].set_sensitive(False)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(False)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(True)
+           self.codec_buttons['mpeg4'].set_sensitive(True)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['aac'].set_active(True)
            self.AudioCodec = "mp3"
-           self.h264button.set_active(True)
+           self.codec_buttons['h264'].set_active(True)
            self.VideoCodec = "h264"
        elif ContainerChoice == "MPEG PS":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(True)
-           self.ac3button.set_sensitive(True)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(False)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(True)
-           self.mpeg4button.set_sensitive(True)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(False)
-           self.mp3button.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(True)
+           self.codec_buttons['ac3'].set_sensitive(True)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(False)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(True)
+           self.codec_buttons['mpeg4'].set_sensitive(True)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_active(True)
            self.AudioCodec = "mp3"
-           self.mpeg2button.set_active(True)
+           self.codec_buttons['mpeg2'].set_active(True)
            self.VideoCodec = "mpeg2"	  
        elif ContainerChoice == "MPEG TS":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(True)
-           self.ac3button.set_sensitive(True)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(True)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(False)
-           self.mpeg4button.set_sensitive(False)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(False)
-           self.mp3button.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(True)
+           self.codec_buttons['ac3'].set_sensitive(True)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(True)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(False)
+           self.codec_buttons['mpeg4'].set_sensitive(False)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_active(True)
            self.AudioCodec = "mp3"
-           self.mpeg2button.set_active(True)
+           self.codec_buttons['mpeg2'].set_active(True)
            self.VideoCodec = "h264"	  
        elif ContainerChoice == "FLV":
-           self.vorbisbutton.set_sensitive(False)
-           self.flacbutton.set_sensitive(False)
-           self.mp3button.set_sensitive(True)
-           self.aacbutton.set_sensitive(False)
-           self.ac3button.set_sensitive(False)
-           self.speexbutton.set_sensitive(False)
-           self.celtbutton.set_sensitive(False)
-           self.theorabutton.set_sensitive(False)
-           self.diracbutton.set_sensitive(False)
-           self.h264button.set_sensitive(True)
-           self.mpeg2button.set_sensitive(False)
-           self.mpeg4button.set_sensitive(False)
-           self.xvidbutton.set_sensitive(False)
-           self.dnxhdbutton.set_sensitive(False)
-           self.mp3button.set_active(True)
+           self.codec_buttons['vorbis'].set_sensitive(False)
+           self.codec_buttons['flac'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_sensitive(True)
+           self.codec_buttons['aac'].set_sensitive(False)
+           self.codec_buttons['ac3'].set_sensitive(False)
+           self.codec_buttons['speex'].set_sensitive(False)
+           self.codec_buttons['celt'].set_sensitive(False)
+           self.codec_buttons['theora'].set_sensitive(False)
+           self.codec_buttons['dirac'].set_sensitive(False)
+           self.codec_buttons['h264'].set_sensitive(True)
+           self.codec_buttons['mpeg2'].set_sensitive(False)
+           self.codec_buttons['mpeg4'].set_sensitive(False)
+           self.codec_buttons['xvid'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['mp3'].set_active(True)
            self.AudioCodec = "mp3"
-           self.h264button.set_active(True)
+           self.codec_button['h264'].set_active(True)
            self.VideoCodec = "h264"
 
-   def on_vorbisbutton_pressed(self, widget):
-       self.AudioCodec = "vorbis"
+   def on_audiobutton_pressed(self, widget, codec):
+       self.AudioCodec = codec
 
-   def on_flacbutton_pressed(self, widget):
-       self.AudioCodec = "flac"
-
-   def on_mp3button_pressed(self, widget):
-       self.AudioCodec = "mp3"
-
-   def on_aacbutton_pressed(self, widget):
-       self.AudioCodec = "aac"
-
-   def on_ac3button_pressed(self, widget):
-       self.AudioCodec = "ac3"
-
-   def on_speexbutton_pressed(self, widget):
-       self.AudioCodec = "speex"
-
-   def on_celtbutton_pressed(self, widget):
-       self.AudioCodec = "celt"
-
-   def on_alacbutton_pressed(self, widget):
-       self.AudioCodec = "alac"
-
-   def on_wma2button_pressed(self, widget):
-       self.AudioCodec = "wma2"
-
-   def on_theorabutton_pressed(self, widget):
-       self.VideoCodec = "theora"
-
-   def on_diracbutton_pressed(self, widget):
-       self.VideoCodec = "dirac"
-
-   def on_h264button_pressed(self, widget):
-       self.VideoCodec = "h264"
-
-   def on_mpeg2button_pressed(self, widget):
-       self.VideoCodec = "mpeg2"
-
-   def on_mpeg4button_pressed(self, widget):
-       self.VideoCodec = "mpeg4"
-
-   def on_wmv2button_pressed(self, widget):
-       self.VideoCodec = "wmv2"
-
-   def on_xvidbutton_pressed(self, widget):
-       self.VideoCodec = "xvid"
-
-   def on_dnxhdbutton_pressed(self, widget):
-       self.VideoCodec = "dnxhd"
-
+   def on_videobutton_pressed(self, widget, codec):
+       self.VideoCodec = codec
 
    def on_MainWindow_destroy(self, widget):
        gtk.main_quit()
