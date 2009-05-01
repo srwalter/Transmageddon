@@ -32,8 +32,8 @@ def list_compat(a1, b1):
    return True
 
 containermap = { 'Ogg' : "application/ogg",'Matroska' : "video/x-matroska", 'MXF' : "application/mxf", 'AVI' : "video/x-msvideo", 
-                        'Quicktime' : "video/quicktime", 'MPEG4' : "application/x-iso-mp4", 'MPEG PS' : "ffmux_mpeg", 
-                        'MPEG TS' : "video/mpegts", 'FLV' : "video/x-flv", '3GPP' : "application/x-3gp" }
+                        'Quicktime' : "video/quicktime,variant=apple", 'MPEG4' : "video/quicktime,variant=iso", 'MPEG PS' : "ffmux_mpeg", 
+                        'MPEG TS' : "video/mpegts", 'FLV' : "video/x-flv", '3GPP' : "video/quicktime,variant=3gpp" }
 
 csuffixmap =   { 'Ogg' : ".ogg", 'Matroska' : ".mkv", 'MXF' : ".mxf", 'AVI' : ".avi", 'Quicktime' : ".mov",
                         'MPEG4' : ".mp4", 'MPEG PS' : ".mpg", 'MPEG TS' : ".ts", 'FLV' : ".flv", '3GPP' : ".3gp" }
