@@ -45,6 +45,8 @@ try:
 except:
        sys.exit(1)
 
+start_time = time.time()
+
 class TransmageddonUI (gtk.glade.XML):
    """This class loads the Glade file of the UI"""
    def __init__(self):
@@ -124,13 +126,14 @@ class TransmageddonUI (gtk.glade.XML):
        self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV", "Quicktime", "MPEG4", "3GPP", "MXF" ]
        for i in self.lst:
            self.ContainerChoice.append_text(i)
-
+   
+  
    # Create query on uridecoder to get values to populate progressbar 
    # Notes:
    # Query interface only available on uridecoder, not decodebin2)
    # FORMAT_TIME only value implemented by all plugins used
    # a lot of original code from gst-python synchronizer.py example
-   def Increment_Progressbar(self):
+   def Increment_Progressbar(self): 
        try:
            position, format = self._transcoder.uridecoder.query_position(gst.FORMAT_TIME)
        except:
@@ -143,8 +146,22 @@ class TransmageddonUI (gtk.glade.XML):
        if position != gst.CLOCK_TIME_NONE:
            value = float(position) / duration
            if float(value) < (1.0) and float(value) >= 0:
-           # print value
                self.ProgressBar.set_fraction(value)
+               percent = (value*100)
+               timespent = time.time() - start_time
+               percent_remain = (100-percent)
+               rem = (timespent / percent) * percent_remain
+               min = rem / 60
+               sec = rem % 60
+               try:
+                   time_rem = _("%(min)d:%(sec)02d") % {
+                   "min": min,
+                   "sec": sec,
+                   }
+               except TypeError:
+                   raise TranscoderStatusException(_("Problem calculating time " \
+                                              "remaining!"))
+               self.ProgressBar.set_text(_("Estimated time remaining: ") + str(time_rem))
                return True
            else:
                self.ProgressBar.set_fraction(0.0)
