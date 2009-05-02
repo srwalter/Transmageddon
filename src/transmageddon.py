@@ -142,13 +142,15 @@ class TransmageddonUI (gtk.glade.XML):
            duration = gst.CLOCK_TIME_NONE
        if position != gst.CLOCK_TIME_NONE:
            value = float(position) / duration
-           if float(value) < (1.0):
+           if float(value) < (1.0) and float(value) >= 0:
            # print value
                self.ProgressBar.set_fraction(value)
                return True
            else:
-               self.ProgressBar.set_fraction(1.0)
+               self.ProgressBar.set_fraction(0.0)
                return False
+       else:
+           return False
 
    # Call gobject.timeout_add with a value of 500millisecond to regularly poll for position so we can
    # use it for the progressbar
@@ -196,7 +198,7 @@ class TransmageddonUI (gtk.glade.XML):
        self.ContainerChoice.set_sensitive(True)
        self.CodecBox.set_sensitive(True)
        self.cancelbutton.set_sensitive(False)
-       self.TranscodeButton.set_sensitive(True)
+       self.TranscodeButton.set_sensitive(False)
 
    def _start_transcoding(self):
        FileChoice = self.get_widget ("FileChooser").get_uri()
@@ -487,56 +489,64 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_active(True)
            self.VideoCodec = "h264"
 
+   def audio_codec_changed (self, audio_codec):
+       self.TranscodeButton.set_sensitive(True)
+       self.AudioCodec = audio_codec
+
+   def video_codec_changed (self, video_codec):
+       self.TranscodeButton.set_sensitive(True)
+       self.VideoCodec = video_codec
+
    def on_vorbisbutton_pressed(self, widget):
-       self.AudioCodec = "vorbis"
+       self.audio_codec_changed("vorbis")
 
    def on_flacbutton_pressed(self, widget):
-       self.AudioCodec = "flac"
+       self.audio_codec_changed("flac")
 
    def on_mp3button_pressed(self, widget):
-       self.AudioCodec = "mp3"
+       self.audio_codec_changed("mp3")
 
    def on_aacbutton_pressed(self, widget):
-       self.AudioCodec = "aac"
+       self.audio_codec_changed("aac")
 
    def on_ac3button_pressed(self, widget):
-       self.AudioCodec = "ac3"
+       self.audio_codec_changed("ac3")
 
    def on_speexbutton_pressed(self, widget):
-       self.AudioCodec = "speex"
+       self.audio_codec_changed("speex")
 
    def on_celtbutton_pressed(self, widget):
-       self.AudioCodec = "celt"
+       self.audio_codec_changed("celt")
 
    def on_alacbutton_pressed(self, widget):
-       self.AudioCodec = "alac"
+       self.audio_codec_changed("alac")
 
    def on_wma2button_pressed(self, widget):
-       self.AudioCodec = "wma2"
+       self.audio_codec_changed("wma2")
 
    def on_theorabutton_pressed(self, widget):
-       self.VideoCodec = "theora"
+       self.video_codec_changed("theora")
 
    def on_diracbutton_pressed(self, widget):
-       self.VideoCodec = "dirac"
+       self.video_codec_changed("dirac")
 
    def on_h264button_pressed(self, widget):
-       self.VideoCodec = "h264"
+       self.video_codec_changed("h264")
 
    def on_mpeg2button_pressed(self, widget):
-       self.VideoCodec = "mpeg2"
+       self.video_codec_changed("mpeg2")
 
    def on_mpeg4button_pressed(self, widget):
-       self.VideoCodec = "mpeg4"
+       self.video_codec_changed("mpeg4")
 
    def on_wmv2button_pressed(self, widget):
-       self.VideoCodec = "wmv2"
+       self.video_codec_changed("wmv2")
 
    def on_xvidbutton_pressed(self, widget):
-       self.VideoCodec = "xvid"
+       self.video_codec_changed("xvid")
 
    def on_dnxhdbutton_pressed(self, widget):
-       self.VideoCodec = "dnxhd"
+       self.video_codec_changed("dnxhd")
 
 
    def on_MainWindow_destroy(self, widget):
