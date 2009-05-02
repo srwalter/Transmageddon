@@ -68,11 +68,16 @@ def get_muxer_element(containercaps):
    """
    muxers = available_muxers()
    stringcaps = []
+   blacklist = ['rate','systemstream','packetsize']
    for x in muxers:
        factory = gst.registry_get_default().lookup_feature(str(x))
        sinkcaps = [x.get_caps() for x in factory.get_static_pad_templates() if x.direction == gst.PAD_SRC]
        for caps in sinkcaps:
-           stringcaps.append(caps[0].get_name())
+           result = caps[0].get_name();
+           for attr in caps[0].keys():
+               if attr not in blacklist:
+                   result += ","+attr+"="+str(caps[0][attr])
+           stringcaps.append(result)
 
    # print stringcaps
    muxerchoice = dict(zip(stringcaps, muxers))
