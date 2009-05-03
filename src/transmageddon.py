@@ -33,16 +33,16 @@ from gettext import gettext as _
 import gettext
 
 try:
-       import pygtk
-       pygtk.require("2.0")
-       import glib
-       import gtk
-       import gtk.glade
-       import pygst
-       pygst.require("0.10")
-       import gst
-       from gst.extend import discoverer
-       import gst.pbutils
+   import pygtk
+   pygtk.require("2.0")
+   import glib
+   import gtk
+   import gtk.glade
+   import pygst
+   pygst.require("0.10")
+   import gst
+   from gst.extend import discoverer
+   import gst.pbutils
 except:
        sys.exit(1)
 
