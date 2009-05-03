@@ -25,7 +25,6 @@ import codecfinder
 
 try:
    import gobject; gobject.threads_init()
-   import gobject
    import pygst
    import glib
    pygst.require("0.10")
@@ -62,7 +61,7 @@ class Transcoder(gobject.GObject):
 
        # Remove suffix from inbound filename so we can reuse it together with suffix to create outbound filename
        self.FileNameOnly = os.path.splitext(os.path.basename(FILENAME))[0]
-       self.VideoDirectory = os.path.expanduser("~")+"/Videos/"
+       self.VideoDirectory = glib.get_user_special_dir(glib.USER_DIRECTORY_VIDEOS)
        CheckDir = os.path.isdir(self.VideoDirectory)
        if CheckDir == (False):
            os.mkdir(self.VideoDirectory)

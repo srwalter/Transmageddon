@@ -34,7 +34,7 @@ import gettext
 try:
        import pygtk
        pygtk.require("2.0")
-       import gobject
+       import glib
        import gtk
        import gtk.glade
        import pygst
@@ -91,7 +91,7 @@ class TransmageddonUI (gtk.glade.XML):
        self.signal_autoconnect(self) # Initialize User Interface
 
        # Set the Videos XDG UserDir as the default directory for the filechooser, also make sure directory exists
-       self.VideoDirectory = os.path.expanduser("~")+"/Videos/"
+       self.VideoDirectory = glib.get_user_special_dir(glib.USER_DIRECTORY_VIDEOS)
        CheckDir = os.path.isdir(self.VideoDirectory)
        if CheckDir == (False):
            os.mkdir(self.VideoDirectory)
