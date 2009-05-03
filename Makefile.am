@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = dist-bzip2
 
-SUBDIRS	= bin src common po
+SUBDIRS	= bin src common po debian
 
 @INTLTOOL_DESKTOP_RULE@
 

@@ -6,7 +6,8 @@ transmageddon_PYTHON = \
 	transmageddon.py \
 	transcoder_engine.py \
 	transmageddon.glade \
-	codecfinder.py
+	codecfinder.py \
+	about.py
 
 BUILT_SOURCES=
 
