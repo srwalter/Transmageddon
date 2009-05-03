@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Apr 28 10:48:55 2009 -->
+<!--Generated with glade3 3.4.5 on Sun May  3 12:27:46 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="TopWindow">
     <property name="visible">True</property>
@@ -122,7 +122,8 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkMenuItem" id="menuitem8">
+              <widget class="GtkMenuItem" id="help">
+                <property name="visible">True</property>
                 <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <child>
@@ -134,7 +135,7 @@
                         <property name="label">gtk-about</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="_aboutCb"/>
+                        <signal name="activate" handler="on_about_dialog_activate"/>
                       </widget>
                     </child>
                   </widget>
@@ -156,11 +157,199 @@
                 <property name="n_rows">6</property>
                 <property name="n_columns">3</property>
                 <child>
-                  <widget class="GtkLabel" id="hspacer1">
+                  <widget class="GtkLabel" id="vspacer3">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="audioinformation">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;small&gt;Audio Channels:&lt;/small&gt;</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="videoinformation">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes">&lt;small&gt;Video height&amp;#47;width:&lt;/small&gt;</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Output Container Format:&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer6">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkComboBox" id="ContainerChoice">
+                    <property name="visible">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip" translatable="yes">Choose your prefered container format</property>
+                    <property name="active">0</property>
+                    <property name="items"></property>
+                    <signal name="changed" handler="ContainerChoice_changed_cb"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="hspacer6">
                     <property name="height_request">6</property>
                     <property name="visible">True</property>
                   </widget>
                   <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                    <property name="y_options">GTK_EXPAND</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer5">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="hspacer5">
+                    <property name="height_request">6</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                    <property name="y_options">GTK_EXPAND</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="ChooseFileLabel">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Choose Input File:&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="max_width_chars">0</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkFileChooserButton" id="FileChooser">
+                    <property name="visible">True</property>
+                    <signal name="file_set" handler="on_FileChooser_file_set"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer1">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="hspacer4">
+                    <property name="height_request">6</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="y_options">GTK_EXPAND</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer4">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="hspacer3">
+                    <property name="height_request">6</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="y_options">GTK_EXPAND</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="hspacer2">
+                    <property name="height_request">6</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="y_options">GTK_EXPAND</property>
@@ -182,202 +371,14 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="hspacer2">
+                  <widget class="GtkLabel" id="hspacer1">
                     <property name="height_request">6</property>
                     <property name="visible">True</property>
                   </widget>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="y_options">GTK_EXPAND</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="hspacer3">
-                    <property name="height_request">6</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="y_options">GTK_EXPAND</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer4">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="hspacer4">
-                    <property name="height_request">6</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="y_options">GTK_EXPAND</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer1">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkFileChooserButton" id="FileChooser">
-                    <property name="visible">True</property>
-                    <signal name="file_set" handler="on_FileChooser_file_set"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="ChooseFileLabel">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Choose Input File:&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="max_width_chars">0</property>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="hspacer5">
-                    <property name="height_request">6</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                    <property name="y_options">GTK_EXPAND</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer5">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="hspacer6">
-                    <property name="height_request">6</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                    <property name="y_options">GTK_EXPAND</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkComboBox" id="ContainerChoice">
-                    <property name="visible">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip" translatable="yes">Choose your prefered container format</property>
-                    <property name="active">0</property>
-                    <property name="items"></property>
-                    <signal name="changed" handler="ContainerChoice_changed_cb"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer6">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label5">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Output Container Format:&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="videoinformation">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
-                    <property name="label" translatable="yes">&lt;small&gt;Video height&amp;#47;width:&lt;/small&gt;</property>
-                    <property name="use_markup">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="audioinformation">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;small&gt;Audio Channels:&lt;/small&gt;</property>
-                    <property name="use_markup">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer3">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="x_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -388,257 +389,179 @@
                 <property name="n_rows">10</property>
                 <property name="n_columns">3</property>
                 <child>
-                  <widget class="GtkRadioButton" id="dnxhdbutton">
+                  <widget class="GtkLabel" id="label3">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">DNxHD</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">theorabutton</property>
-                    <signal name="pressed" handler="on_dnxhdbutton_pressed"/>
-                    <signal name="activate" handler="on_dnxhdbutton_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkRadioButton" id="xvidbutton">
+                  <widget class="GtkLabel" id="label12">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">xvid</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">theorabutton</property>
-                    <signal name="pressed" handler="on_xvidbutton_pressed"/>
-                    <signal name="activate" handler="on_xvidbutton_pressed"/>
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label15">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Choose Audio Codec&lt;/b&gt;:</property>
-                    <property name="use_markup">True</property>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label14">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Choose Video Codec&lt;/b&gt;:</property>
-                    <property name="use_markup">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer24">
+                  <widget class="GtkLabel" id="vspacer15">
                     <property name="width_request">12</property>
                     <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                     <property name="x_options"></property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkRadioButton" id="vorbisbutton">
+                  <widget class="GtkLabel" id="vspacer16">
+                    <property name="width_request">12</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Vorbis</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="pressed" handler="on_vorbisbutton_pressed"/>
-                    <signal name="activate" handler="on_vorbisbutton_pressed"/>
                   </widget>
                   <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="y_padding">3</property>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                    <property name="x_options"></property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkRadioButton" id="theorabutton">
+                  <widget class="GtkLabel" id="vspacer17">
+                    <property name="width_request">12</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Theora</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="pressed" handler="on_theorabutton_pressed"/>
-                    <signal name="activate" handler="on_theorabutton_pressed"/>
                   </widget>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="flacbutton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">FLAC</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">vorbisbutton</property>
-                    <signal name="pressed" handler="on_flacbutton_pressed"/>
-                    <signal name="activate" handler="on_flacbutton_pressed"/>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="diracbutton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Dirac</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">theorabutton</property>
-                    <signal name="pressed" handler="on_diracbutton_pressed"/>
-                    <signal name="activate" handler="on_diracbutton_pressed"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="mp3button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">mp3</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">vorbisbutton</property>
-                    <signal name="pressed" handler="on_mp3button_pressed"/>
-                    <signal name="activate" handler="on_mp3button_pressed"/>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="h264button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">H264</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">theorabutton</property>
-                    <signal name="pressed" handler="on_h264button_pressed"/>
-                    <signal name="activate" handler="on_h264button_pressed"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="aacbutton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">AAC</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">vorbisbutton</property>
-                    <signal name="pressed" handler="on_aacbutton_pressed"/>
-                    <signal name="activate" handler="on_aacbutton_pressed"/>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="ac3button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">AC3</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">vorbisbutton</property>
-                    <signal name="pressed" handler="on_ac3button_pressed"/>
-                    <signal name="activate" handler="on_ac3button_pressed"/>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="speexbutton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Speex</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">vorbisbutton</property>
-                    <signal name="pressed" handler="on_speexbutton_pressed"/>
-                    <signal name="activate" handler="on_speexbutton_pressed"/>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
-                    <property name="y_padding">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkRadioButton" id="celtbutton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Celt</property>
-                    <property name="response_id">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">vorbisbutton</property>
-                    <signal name="pressed" handler="on_celtbutton_pressed"/>
-                    <signal name="activate" handler="on_celtbutton_pressed"/>
-                  </widget>
-                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer18">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer19">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer20">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer21">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer22">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer23">
+                    <property name="width_request">12</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="mpeg4button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">MPEG4/DivX5</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">theorabutton</property>
+                    <signal name="pressed" handler="on_mpeg4button_pressed"/>
+                    <signal name="activate" handler="on_mpeg4button_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
                     <property name="y_padding">3</property>
                   </packing>
                 </child>
@@ -663,180 +586,258 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkRadioButton" id="mpeg4button">
+                  <widget class="GtkRadioButton" id="celtbutton">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">MPEG4/DivX5</property>
+                    <property name="label" translatable="yes">Celt</property>
                     <property name="response_id">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">theorabutton</property>
-                    <signal name="pressed" handler="on_mpeg4button_pressed"/>
-                    <signal name="activate" handler="on_mpeg4button_pressed"/>
+                    <property name="group">vorbisbutton</property>
+                    <signal name="pressed" handler="on_celtbutton_pressed"/>
+                    <signal name="activate" handler="on_celtbutton_pressed"/>
                   </widget>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="speexbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Speex</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">vorbisbutton</property>
+                    <signal name="pressed" handler="on_speexbutton_pressed"/>
+                    <signal name="activate" handler="on_speexbutton_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="ac3button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">AC3</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">vorbisbutton</property>
+                    <signal name="pressed" handler="on_ac3button_pressed"/>
+                    <signal name="activate" handler="on_ac3button_pressed"/>
+                  </widget>
+                  <packing>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                     <property name="y_padding">3</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="vspacer23">
-                    <property name="width_request">12</property>
+                  <widget class="GtkRadioButton" id="aacbutton">
                     <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">AAC</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">vorbisbutton</property>
+                    <signal name="pressed" handler="on_aacbutton_pressed"/>
+                    <signal name="activate" handler="on_aacbutton_pressed"/>
                   </widget>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer22">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer21">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer20">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
-                    <property name="x_options"></property>
+                    <property name="y_padding">3</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="vspacer19">
+                  <widget class="GtkRadioButton" id="h264button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">H264</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">theorabutton</property>
+                    <signal name="pressed" handler="on_h264button_pressed"/>
+                    <signal name="activate" handler="on_h264button_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="mp3button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">mp3</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">vorbisbutton</property>
+                    <signal name="pressed" handler="on_mp3button_pressed"/>
+                    <signal name="activate" handler="on_mp3button_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="diracbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Dirac</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">theorabutton</property>
+                    <signal name="pressed" handler="on_diracbutton_pressed"/>
+                    <signal name="activate" handler="on_diracbutton_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="flacbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">FLAC</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">vorbisbutton</property>
+                    <signal name="pressed" handler="on_flacbutton_pressed"/>
+                    <signal name="activate" handler="on_flacbutton_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="theorabutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Theora</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="pressed" handler="on_theorabutton_pressed"/>
+                    <signal name="activate" handler="on_theorabutton_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="vorbisbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Vorbis</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="pressed" handler="on_vorbisbutton_pressed"/>
+                    <signal name="activate" handler="on_vorbisbutton_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="vspacer24">
                     <property name="width_request">12</property>
                     <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
                     <property name="x_options"></property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="vspacer18">
-                    <property name="width_request">12</property>
+                  <widget class="GtkLabel" id="label14">
                     <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Choose Video Codec&lt;/b&gt;:</property>
+                    <property name="use_markup">True</property>
                   </widget>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label15">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Choose Audio Codec&lt;/b&gt;:</property>
+                    <property name="use_markup">True</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkRadioButton" id="xvidbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">xvid</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">theorabutton</property>
+                    <signal name="pressed" handler="on_xvidbutton_pressed"/>
+                    <signal name="activate" handler="on_xvidbutton_pressed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
                     <property name="top_attach">6</property>
                     <property name="bottom_attach">7</property>
-                    <property name="x_options"></property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="vspacer17">
-                    <property name="width_request">12</property>
+                  <widget class="GtkRadioButton" id="dnxhdbutton">
                     <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">DNxHD</property>
+                    <property name="response_id">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">theorabutton</property>
+                    <signal name="pressed" handler="on_dnxhdbutton_pressed"/>
+                    <signal name="activate" handler="on_dnxhdbutton_pressed"/>
                   </widget>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
                     <property name="top_attach">7</property>
                     <property name="bottom_attach">8</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer16">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="vspacer15">
-                    <property name="width_request">12</property>
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
-                    <property name="x_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label12">
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
                   </packing>
                 </child>
               </widget>

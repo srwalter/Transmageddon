@@ -27,6 +27,7 @@ import transcoder_engine
 import gobject; gobject.threads_init()
 from urlparse import urlparse
 import codecfinder
+import about
 
 from gettext import gettext as _
 import gettext
@@ -565,9 +566,14 @@ class TransmageddonUI (gtk.glade.XML):
    def on_dnxhdbutton_pressed(self, widget):
        self.video_codec_changed("dnxhd")
 
-
    def on_MainWindow_destroy(self, widget):
        gtk.main_quit()
+
+   def on_about_dialog_activate(self, widget):
+       """
+           Show the about dialog.
+       """
+       about.AboutDialog()
 
 if __name__ == "__main__":
         hwg = TransmageddonUI()
