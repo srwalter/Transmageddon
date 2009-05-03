@@ -1,3 +1,7 @@
+0.9: Mostly UI polish:
+   Add an about dialog
+   Add time estimation before completion
+   Use the new pygobject bindings for XDG dir (we now require pygobject 2.17.0)
 0.8: Minor fixes: 
    correct MPEG4/Div5 so it actually works
    add MXF support
