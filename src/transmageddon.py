@@ -44,7 +44,7 @@ try:
    from gst.extend import discoverer
    import gst.pbutils
 except:
-       sys.exit(1)
+   sys.exit(1)
 
 start_time = time.time()
 
