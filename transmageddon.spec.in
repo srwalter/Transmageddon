@@ -15,7 +15,7 @@ Requires:	gstreamer >= @GST_REQ@
 Requires:	gstreamer-python >= @PYGST_REQ@
 Requires:	pygtk2 >= @PYGTK_REQ@
 Requires:	gnome-python2 >= @PYGNOME_REQ@
-Requires:	gnome-python2-gconf
+Requires:	pygobject2 >= 2.17.0
 
 BuildRequires:	gstreamer-devel >= @GST_REQ@
 BuildRequires:	gstreamer-python >= @PYGST_REQ@
