@@ -81,9 +81,8 @@ supported_video_codecs = [
        "h264",
        "mpeg2",
        "mpeg4",
-#       "wmv2",
        "xvid",
-       "dnxhd",
+       "dnxhd"
 ]
 
 class TransmageddonUI (gtk.glade.XML):
@@ -544,7 +543,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.codec_buttons['mpeg2'].set_sensitive(False)
            self.codec_buttons['mpeg4'].set_sensitive(False)
            self.codec_buttons['xvid'].set_sensitive(False)
-          self.codec_buttons['dnxhd'].set_sensitive(False)
+           self.codec_buttons['dnxhd'].set_sensitive(False)
            self.codec_buttons['mp3'].set_active(True)
            self.AudioCodec = "mp3"
            self.codec_buttons['mpeg2'].set_active(True)
