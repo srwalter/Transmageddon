@@ -28,6 +28,8 @@ import gobject; gobject.threads_init()
 from urlparse import urlparse
 import codecfinder
 import about
+import presets
+import utils
 
 from gettext import gettext as _
 import gettext
@@ -66,7 +68,8 @@ class TransmageddonUI (gtk.glade.XML):
        self.videoinformation = self.get_widget("videoinformation")
        self.audioinformation = self.get_widget("audioinformation")
        self.CodecBox = self.get_widget("CodecBox")
-       self.ContainerChoice = self.get_widget("ContainerChoice")
+       self.containerchoice = self.get_widget("containerchoice")
+       self.presetchoice = self.get_widget("presetchoice")
        self.vorbisbutton = self.get_widget("vorbisbutton")
        self.flacbutton = self.get_widget("flacbutton")
        self.mp3button = self.get_widget("mp3button")
@@ -84,10 +87,12 @@ class TransmageddonUI (gtk.glade.XML):
        self.wmv2button = self.get_widget("wmv2button")
        self.xvidbutton = self.get_widget("xvidbutton")
        self.dnxhdbutton = self.get_widget("dnxhdbutton")
-       self.TranscodeButton = self.get_widget("TranscodeButton")
+       self.transcodebutton = self.get_widget("transcodebutton")
        self.ProgressBar = self.get_widget("ProgressBar")
        self.cancelbutton = self.get_widget("cancelbutton")
        self.StatusBar = self.get_widget("StatusBar")
+
+       self.TopWindow.connect("destroy", gtk.main_quit)
 
        self.signal_autoconnect(self) # Initialize User Interface
 
@@ -109,10 +114,11 @@ class TransmageddonUI (gtk.glade.XML):
                print "failed to find appicon"
 
        # default all but top box to insensitive by default
-       self.ContainerChoice.set_sensitive(False)
+       # self.containerchoice.set_sensitive(False)
        self.CodecBox.set_sensitive(False)
-       self.TranscodeButton.set_sensitive(False)
+       self.transcodebutton.set_sensitive(False)
        self.cancelbutton.set_sensitive(False)
+       self.presetchoice.set_sensitive(False)
 
        # set default values for various variables
        self.AudioCodec = "vorbis"
@@ -123,12 +129,20 @@ class TransmageddonUI (gtk.glade.XML):
        self.p_time = gst.FORMAT_TIME
 
        # Populate the Container format combobox
-       containers = gtk.ListStore(gobject.TYPE_STRING)
        self.lst = [ "Ogg", "Matroska", "AVI", "MPEG TS", "FLV", "Quicktime", "MPEG4", "3GPP", "MXF" ]
        for i in self.lst:
-           self.ContainerChoice.append_text(i)
-   
-  
+           self.containerchoice.append_text(i)
+      
+       # Populate presets combobox
+       selected = 0
+       for x, (id, device) in enumerate(sorted(presets.get().items(),
+                                   lambda x, y: cmp(x[1].make + x[1].model,
+                                                    y[1].make + y[1].model))):
+           iter = self.presetchoice.append_text(str(device))
+           if id == "computer":
+               selected = x
+       self.presetchoice.prepend_text("No Presets")
+
    # Create query on uridecoder to get values to populate progressbar 
    # Notes:
    # Query interface only available on uridecoder, not decodebin2)
@@ -213,16 +227,16 @@ class TransmageddonUI (gtk.glade.XML):
        context_id = self.StatusBar.get_context_id("EOS")
        self.StatusBar.push(context_id, (_("File saved to ") + self.VideoDirectory))
        self.FileChooser.set_sensitive(True)
-       self.ContainerChoice.set_sensitive(True)
+       self.containerchoice.set_sensitive(True)
        self.CodecBox.set_sensitive(True)
        self.cancelbutton.set_sensitive(False)
-       self.TranscodeButton.set_sensitive(False)
+       self.transcodebutton.set_sensitive(False)
 
    def _start_transcoding(self):
        FileChoice = self.get_widget ("FileChooser").get_uri()
        FileName = self.get_widget ("FileChooser").get_filename()
-       ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
-       self._transcoder = transcoder_engine.Transcoder(FileChoice, FileName, ContainerChoice, self.AudioCodec, self.VideoCodec)
+       containerchoice = self.get_widget ("containerchoice").get_active_text ()
+       self._transcoder = transcoder_engine.Transcoder(FileChoice, FileName, containerchoice, self.AudioCodec, self.VideoCodec)
        self._transcoder.connect("ready-for-querying", self.ProgressBarUpdate)
        self._transcoder.connect("got-eos", self._on_eos)
        return True
@@ -243,32 +257,32 @@ class TransmageddonUI (gtk.glade.XML):
            context_id = self.StatusBar.get_context_id("EOS")
            self.StatusBar.push(context_id, _("Plugins not found, choose different codecs."))
            self.FileChooser.set_sensitive(True)
-           self.ContainerChoice.set_sensitive(True)
+           self.containerchoice.set_sensitive(True)
            self.CodecBox.set_sensitive(True)
            self.cancelbutton.set_sensitive(False)
-           self.TranscodeButton.set_sensitive(True)
+           self.transcodebutton.set_sensitive(True)
        elif donemessage == gst.pbutils.INSTALL_PLUGINS_USER_ABORT:
            context_id = self.StatusBar.get_context_id("EOS")
            self.StatusBar.push(context_id, _("Codec installation aborted."))
            self.FileChooser.set_sensitive(True)
-           self.ContainerChoice.set_sensitive(True)
+           self.containerchoice.set_sensitive(True)
            self.CodecBox.set_sensitive(True)
            self.cancelbutton.set_sensitive(False)
-           self.TranscodeButton.set_sensitive(True)
+           self.transcodebutton.set_sensitive(True)
        else:
            context_id = self.StatusBar.get_context_id("EOS")
            self.StatusBar.push(context_id, _("Missing plugin installation failed: ")) + gst.pbutils.InstallPluginsReturn()
 
    def check_for_elements(self):
-       ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
-       containerstatus = codecfinder.get_muxer_element(codecfinder.containermap[ContainerChoice])
+       containerchoice = self.get_widget ("containerchoice").get_active_text ()
+       containerstatus = codecfinder.get_muxer_element(codecfinder.containermap[containerchoice])
        audiostatus = codecfinder.get_audio_encoder_element(codecfinder.codecmap[self.AudioCodec])
        videostatus = codecfinder.get_video_encoder_element(codecfinder.codecmap[self.VideoCodec])
        
        if not containerstatus or not videostatus or not audiostatus:
            fail_info = []  
            if containerstatus == False: 
-               fail_info.append(gst.caps_from_string(codecfinder.containermap[ContainerChoice]))
+               fail_info.append(gst.caps_from_string(codecfinder.containermap[containerchoice]))
            if audiostatus == False:
                fail_info.append(gst.caps_from_string(codecfinder.codecmap[self.AudioCodec]))
            if videostatus == False:
@@ -281,12 +295,12 @@ class TransmageddonUI (gtk.glade.XML):
        else:
            self._start_transcoding()
 
-   # The Transcodebutton is the one that calls the Transcoder class and thus starts the transcoding
-   def on_TranscodeButton_clicked(self, widget):
+   # The transcodebutton is the one that calls the Transcoder class and thus starts the transcoding
+   def on_transcodebutton_clicked(self, widget):
        self.FileChooser.set_sensitive(False)
-       self.ContainerChoice.set_sensitive(False)
+       self.containerchoice.set_sensitive(False)
        self.CodecBox.set_sensitive(False)
-       self.TranscodeButton.set_sensitive(False)
+       self.transcodebutton.set_sensitive(False)
        self.cancelbutton.set_sensitive(True)
        self.ProgressBar.set_fraction(0.0)
        self.ProgressBar.set_text(_("Transcoding Progress"))
@@ -294,7 +308,7 @@ class TransmageddonUI (gtk.glade.XML):
 
    def on_cancelbutton_clicked(self, widget):
        self.FileChooser.set_sensitive(True)
-       self.ContainerChoice.set_sensitive(True)
+       self.containerchoice.set_sensitive(True)
        self.CodecBox.set_sensitive(True)
        self.cancelbutton.set_sensitive(False)
        self._cancel_encoding = transcoder_engine.Transcoder.Pipeline(self._transcoder,"null")
@@ -307,17 +321,19 @@ class TransmageddonUI (gtk.glade.XML):
    def on_FileChooser_file_set(self, widget):
        FileName = self.get_widget ("FileChooser").get_filename()
        codecinfo = self.mediacheck(FileName)
-       self.ContainerChoice.set_sensitive(True)
+       self.containerchoice.set_sensitive(True)
+       self.presetchoice.set_sensitive(True)
+       self.presetchoice.set_active(0)
        self.ProgressBar.set_fraction(0.0)
        self.ProgressBar.set_text(_("Transcoding Progress"))
 
-   def ContainerChoice_changed_cb(self, widget):
+   def on_containerchoice_changed(self, widget):
        self.CodecBox.set_sensitive(True)
-       self.TranscodeButton.set_sensitive(True)
+       self.transcodebutton.set_sensitive(True)
        self.ProgressBar.set_fraction(0.0)
        self.ProgressBar.set_text(_("Transcoding Progress"))
-       ContainerChoice = self.get_widget ("ContainerChoice").get_active_text ()
-       if ContainerChoice == "Ogg":
+       containerchoice = self.get_widget ("containerchoice").get_active_text ()
+       if containerchoice == "Ogg":
            self.vorbisbutton.set_sensitive(True)
            self.flacbutton.set_sensitive(True)
            self.mp3button.set_sensitive(False)
@@ -334,7 +350,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.dnxhdbutton.set_sensitive(False)
            self.vorbisbutton.set_active(True)
            self.theorabutton.set_active(True)
-       if ContainerChoice == "MXF":
+       if containerchoice == "MXF":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -353,7 +369,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.diracbutton.set_active(True)
            self.AudioCodec = "mp3"
            self.VideoCodec = "dirac"
-       elif ContainerChoice == "Matroska":
+       elif containerchoice == "Matroska":
            self.vorbisbutton.set_sensitive(True)
            self.flacbutton.set_sensitive(True)
            self.mp3button.set_sensitive(True)
@@ -372,7 +388,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "flac"
            self.diracbutton.set_active(True)
            self.VideoCodec = "dirac"
-       elif ContainerChoice == "AVI":
+       elif containerchoice == "AVI":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -391,7 +407,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "mp3"
            self.h264button.set_active(True)
            self.VideoCodec = "h264"
-       elif ContainerChoice == "Quicktime":
+       elif containerchoice == "Quicktime":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -410,8 +426,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "aac"
            self.h264button.set_active(True)
            self.VideoCodec = "h264"
-
-       elif ContainerChoice == "MPEG4":
+       elif containerchoice == "MPEG4":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -430,7 +445,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "aac"
            self.h264button.set_active(True)
            self.VideoCodec = "h264"
-       elif ContainerChoice == "3GPP":
+       elif containerchoice == "3GPP":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -449,7 +464,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "mp3"
            self.h264button.set_active(True)
            self.VideoCodec = "h264"
-       elif ContainerChoice == "MPEG PS":
+       elif containerchoice == "MPEG PS":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -468,7 +483,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "mp3"
            self.mpeg2button.set_active(True)
            self.VideoCodec = "mpeg2"	  
-       elif ContainerChoice == "MPEG TS":
+       elif containerchoice == "MPEG TS":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -487,7 +502,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.AudioCodec = "mp3"
            self.mpeg2button.set_active(True)
            self.VideoCodec = "h264"	  
-       elif ContainerChoice == "FLV":
+       elif containerchoice == "FLV":
            self.vorbisbutton.set_sensitive(False)
            self.flacbutton.set_sensitive(False)
            self.mp3button.set_sensitive(True)
@@ -507,12 +522,21 @@ class TransmageddonUI (gtk.glade.XML):
            self.h264button.set_active(True)
            self.VideoCodec = "h264"
 
+   def on_presetchoice_changed(self, widget):
+       presetchoice = self.get_widget ("presetchoice").get_active_text ()
+       # items = presets.load("/home/cschalle/.transmageddon/presets/ipod.xml")
+       print items
+       if presetchoice == "No Presets":
+           self.containerchoice.set_sensitive(True)
+       else:
+           self.containerchoice.set_sensitive(False)
+
    def audio_codec_changed (self, audio_codec):
-       self.TranscodeButton.set_sensitive(True)
+       self.transcodebutton.set_sensitive(True)
        self.AudioCodec = audio_codec
 
    def video_codec_changed (self, video_codec):
-       self.TranscodeButton.set_sensitive(True)
+       self.transcodebutton.set_sensitive(True)
        self.VideoCodec = video_codec
 
    def on_vorbisbutton_pressed(self, widget):
@@ -565,9 +589,6 @@ class TransmageddonUI (gtk.glade.XML):
 
    def on_dnxhdbutton_pressed(self, widget):
        self.video_codec_changed("dnxhd")
-
-   def on_MainWindow_destroy(self, widget):
-       gtk.main_quit()
 
    def on_about_dialog_activate(self, widget):
        """
