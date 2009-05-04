@@ -565,7 +565,7 @@ class TransmageddonUI (gtk.glade.XML):
            self.codec_buttons['dnxhd'].set_sensitive(False)
            self.codec_buttons['mp3'].set_active(True)
            self.AudioCodec = "mp3"
-           self.codec_button['h264'].set_active(True)
+           self.codec_buttons['h264'].set_active(True)
            self.VideoCodec = "h264"
 
    def on_presetchoice_changed(self, widget):
