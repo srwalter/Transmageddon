@@ -15,5 +15,7 @@ po/*.gmo
 po/POTFILES
 po/stamp-it
 py-compile
+src/*.pyc
+src/*.*~
 *.spec
 transmageddon.desktop.in
