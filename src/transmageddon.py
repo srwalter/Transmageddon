@@ -143,7 +143,11 @@ class TransmageddonUI (gtk.glade.XML):
 
        # Set the Videos XDG UserDir as the default directory for the filechooser, 
        # also make sure directory exists
-       self.VideoDirectory = glib.get_user_special_dir(glib.USER_DIRECTORY_VIDEOS)
+       if 'get_user_special_dir' in glib.__dict__:
+           self.VideoDirectory = glib.get_user_special_dir(glib.USER_DIRECTORY_VIDEOS)
+       else:
+           self.VideoDirectory = os.getenv('HOME')
+
        CheckDir = os.path.isdir(self.VideoDirectory)
        if CheckDir == (False):
            os.mkdir(self.VideoDirectory)
